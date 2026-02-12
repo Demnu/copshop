@@ -18,7 +18,8 @@ import {
   Grid,
 } from '@mui/material'
 import { getGreeting } from '@/data/serverFunctions'
-import { getUsers, createUser } from '@/data/userService'
+import { getUsers, createUser } from '@/data/users/userService'
+import { queryKeys } from '@/lib/queryKeys'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -36,7 +37,7 @@ function App() {
 
   // Query for users
   const { data: usersData, isLoading: usersLoading } = useQuery({
-    queryKey: ['users'],
+    queryKey: queryKeys.users.list(1),
     queryFn: () => getUsers({ data: { page: 1, limit: 10 } }),
   })
 
@@ -44,7 +45,7 @@ function App() {
   const createUserMutation = useMutation({
     mutationFn: (data: { name: string; email: string }) => createUser({ data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: queryKeys.users.lists() })
       setUserName('')
       setUserEmail('')
     },

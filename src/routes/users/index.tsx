@@ -1,31 +1,19 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  Stack,
-  Box,
-  Chip,
-  Pagination,
-  Button,
-  Avatar,
-} from '@mui/material'
-import { getUsers } from '@/data/userService'
-import { z } from 'zod'
-
-const usersSearchSchema = z.object({
-  page: z.number().min(1).catch(1),
-})
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { Button, Avatar, Chip } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { getUsers } from '@/data/users/userService'
+import type { UserDto } from '@/data/users/userDtos'
+import { PageContainer } from '@/components/PageContainer'
+import { PageHeader } from '@/components/PageHeader'
+import { PaginatedList } from '@/components/PaginatedList'
+import { getPaginationSubtitle } from '@/components/PaginatedList'
+import { paginationSearchSchema } from '@/components/usePagination'
+import type { Column } from '@/components/DataTable'
+import { queryKeys } from '@/lib/queryKeys'
 
 export const Route = createFileRoute('/users/')({
   component: UsersPage,
-  validateSearch: usersSearchSchema,
-  loaderDeps: ({ search: { page } }) => ({ page }),
-  loader: async ({ deps: { page } }) => {
-    const result = await getUsers({ data: { page, limit: 10 } })
-    return result
-  },
+  validateSearch: paginationSearchSchema,
   head: () => ({
     meta: [
       {
@@ -48,119 +36,74 @@ export const Route = createFileRoute('/users/')({
 })
 
 function UsersPage() {
-  const { users, total, page, limit } = Route.useLoaderData()
-  const navigate = Route.useNavigate()
-  const totalPages = Math.ceil(total / limit)
+  const navigate = useNavigate({ from: Route.fullPath })
+  const { page = 1 } = Route.useSearch()
 
-  const handlePageChange = (
-    _event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    navigate({ search: { page: value } })
-  }
+  const { data, isLoading, error } = useQuery({
+    queryKey: queryKeys.users.list(page),
+    queryFn: () => getUsers({ data: { page, limit: 10 } }),
+  })
+
+  const users = data?.users || []
+  const total = data?.total || 0
+  const limit = data?.limit || 10
+
+  const columns: Column<UserDto>[] = [
+    {
+      id: 'avatar',
+      label: '',
+      format: (user) => (
+        <Avatar
+          src={user.avatar || undefined}
+          alt={user.name}
+          sx={{ width: 40, height: 40 }}
+        >
+          {!user.avatar && user.name[0].toUpperCase()}
+        </Avatar>
+      ),
+    },
+    {
+      id: 'name',
+      label: 'Name',
+    },
+    {
+      id: 'email',
+      label: 'Email',
+    },
+    {
+      id: 'id',
+      label: 'User ID',
+      format: (user) => (
+        <Chip label={user.id.slice(0, 8)} size="small" variant="outlined" />
+      ),
+    },
+  ]
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Stack spacing={3}>
-        <Box>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              mb: 2,
-            }}
-          >
-            <Box>
-              <Typography variant="h4" component="h1" gutterBottom>
-                Users Directory
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                {total} {total === 1 ? 'user' : 'users'} registered • Page{' '}
-                {page} of {totalPages}
-              </Typography>
-            </Box>
-            <Button
-              component={Link}
-              to="/users/new"
-              variant="contained"
-              color="primary"
-            >
-              Create User
-            </Button>
-          </Box>
-        </Box>
+    <PageContainer maxWidth="lg">
+      <PageHeader
+        title="Users Directory"
+        subtitle={getPaginationSubtitle(total, page, limit, 'user')}
+        action={
+          <Button component={Link} to="/users/new" variant="contained">
+            Create User
+          </Button>
+        }
+      />
 
-        {users.length === 0 ? (
-          <Card>
-            <CardContent>
-              <Typography color="text.secondary">No users found.</Typography>
-            </CardContent>
-          </Card>
-        ) : (
-          <Stack spacing={2}>
-            {users.map((user) => (
-              <Link
-                key={user.id}
-                to="/users/$userId"
-                params={{ userId: user.id }}
-                style={{ textDecoration: 'none' }}
-              >
-                <Card
-                  sx={{
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    '&:hover': {
-                      transform: 'translateY(-2px)',
-                      boxShadow: 4,
-                    },
-                  }}
-                >
-                  <CardContent>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Avatar
-                        src={user.avatar || undefined}
-                        alt={user.name}
-                        sx={{ width: 56, height: 56 }}
-                      >
-                        {!user.avatar && user.name[0].toUpperCase()}
-                      </Avatar>
-                      <Stack spacing={1} flex={1}>
-                        <Typography variant="h6" component="h2">
-                          {user.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {user.email}
-                        </Typography>
-                        <Box>
-                          <Chip
-                            label={`ID: ${user.id.slice(0, 8)}`}
-                            size="small"
-                            variant="outlined"
-                          />
-                        </Box>
-                      </Stack>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </Stack>
-        )}
-
-        {totalPages > 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={handlePageChange}
-              color="primary"
-              size="large"
-              showFirstButton
-              showLastButton
-            />
-          </Box>
-        )}
-      </Stack>
-    </Container>
+      <PaginatedList
+        data={users}
+        columns={columns}
+        pagination={{ page, limit, total }}
+        onPageChange={(newPage) => navigate({ search: { page: newPage } })}
+        getRowKey={(user) => user.id}
+        isLoading={isLoading}
+        error={error}
+        emptyMessage="No users found"
+        onRowClick={(user) =>
+          navigate({ to: '/users/$userId', params: { userId: user.id } })
+        }
+      />
+    </PageContainer>
   )
 }

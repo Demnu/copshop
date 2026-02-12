@@ -9,7 +9,7 @@ import {
   Button,
   Box,
 } from '@mui/material'
-import { createUser } from '@/data/userService'
+import { createUser } from '@/data/users/userService'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { MutationError } from '@/components/MutationError'

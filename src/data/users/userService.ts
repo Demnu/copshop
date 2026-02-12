@@ -1,13 +1,18 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { db } from './db'
-import { NewUser, users, type User } from './schema'
+import { db } from '../db'
+import { NewUser, users } from '../schema'
 import { eq, desc, count } from 'drizzle-orm'
+import {
+  paginationInputValidator,
+  getPaginationOffset,
+} from '../paginationHelpers'
+import type { UserDto, UserListDto, DeleteUserDto } from './userDtos'
 
 // Get single user by ID
 export const getUserById = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ userId: z.string() }))
-  .handler(async (ctx): Promise<User | null> => {
+  .handler(async (ctx): Promise<UserDto | null> => {
     const [user] = await db
       .select()
       .from(users)
@@ -20,7 +25,7 @@ export const getUserById = createServerFn({ method: 'GET' })
 // Delete user by ID
 export const deleteUser = createServerFn({ method: 'POST' })
   .inputValidator(z.object({ userId: z.string() }))
-  .handler(async (ctx): Promise<{ success: boolean }> => {
+  .handler(async (ctx): Promise<DeleteUserDto> => {
     await db.delete(users).where(eq(users.id, ctx.data.userId))
     return { success: true }
   })
@@ -35,8 +40,8 @@ export const updateUser = createServerFn({ method: 'POST' })
       avatar: z.string().optional(),
     }),
   )
-  .handler(async (ctx): Promise<User> => {
-    const updates: Partial<User> = {}
+  .handler(async (ctx): Promise<UserDto> => {
+    const updates: Partial<UserDto> = {}
     if (ctx.data.name) updates.name = ctx.data.name
     if (ctx.data.email) {
       // Check if email is already taken by another user
@@ -61,59 +66,42 @@ export const updateUser = createServerFn({ method: 'POST' })
 
     return user
   })
-// Server function to get users with pagination
-export const getUsers = createServerFn({
-  method: 'GET',
-})
-  .inputValidator(
-    z.object({
-      page: z.number().min(1).default(1),
-      limit: z.number().min(1).max(100).default(10),
-    }),
-  )
-  .handler(
-    async (
-      ctx,
-    ): Promise<{
-      users: User[]
-      total: number
-      page: number
-      limit: number
-    }> => {
-      const { page, limit } = ctx.data
-      const offset = (page - 1) * limit
 
-      // Get total count
-      const [{ value: total }] = await db.select({ value: count() }).from(users)
+// Get users with pagination
+export const getUsers = createServerFn({ method: 'GET' })
+  .inputValidator(paginationInputValidator)
+  .handler(async (ctx): Promise<UserListDto> => {
+    const offset = getPaginationOffset(ctx.data.page, ctx.data.limit)
 
-      // Get paginated users
-      const usersList = await db
+    const [usersList, [{ value: totalCount }]] = await Promise.all([
+      db
         .select()
         .from(users)
         .orderBy(desc(users.createdAt))
-        .limit(limit)
-        .offset(offset)
+        .limit(ctx.data.limit)
+        .offset(offset),
+      db.select({ value: count() }).from(users),
+    ])
 
-      return {
-        users: usersList,
-        total,
-        page,
-        limit,
-      }
-    },
-  )
+    return {
+      users: usersList,
+      total: totalCount,
+      page: ctx.data.page,
+      limit: ctx.data.limit,
+    }
+  })
 
-export const createUser = createServerFn({
-  method: 'GET',
-})
+// Create user
+export const createUser = createServerFn({ method: 'POST' })
   .inputValidator(
     z.object({
-      name: z.string(),
-      email: z.string(),
+      name: z.string().min(1, 'Name is required'),
+      email: z.string().email('Valid email is required'),
+      avatar: z.string().optional(),
     }),
   )
-  .handler(async (ctx) => {
-    // Check if email is already taken
+  .handler(async (ctx): Promise<UserDto> => {
+    // Check if email already exists
     const [existingUser] = await db
       .select()
       .from(users)
@@ -127,7 +115,10 @@ export const createUser = createServerFn({
     const newUser: NewUser = {
       name: ctx.data.name,
       email: ctx.data.email,
+      avatar: ctx.data.avatar,
     }
+
     const [user] = await db.insert(users).values(newUser).returning()
+
     return user
   })

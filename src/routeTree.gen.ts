@@ -11,9 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
+import { Route as PoliceOfficersIndexRouteImport } from './routes/police-officers/index'
+import { Route as OrganizationsIndexRouteImport } from './routes/organizations/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as UsersNewRouteImport } from './routes/users/new'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
+import { Route as PoliceOfficersNewRouteImport } from './routes/police-officers/new'
+import { Route as PoliceOfficersOfficerIdRouteImport } from './routes/police-officers/$officerId'
+import { Route as OrganizationsNewRouteImport } from './routes/organizations/new'
+import { Route as OrganizationsOrganizationIdRouteImport } from './routes/organizations/$organizationId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,6 +29,16 @@ const IndexRoute = IndexRouteImport.update({
 const UsersIndexRoute = UsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliceOfficersIndexRoute = PoliceOfficersIndexRouteImport.update({
+  id: '/police-officers/',
+  path: '/police-officers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationsIndexRoute = OrganizationsIndexRouteImport.update({
+  id: '/organizations/',
+  path: '/organizations/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
@@ -40,42 +56,121 @@ const UsersUserIdRoute = UsersUserIdRouteImport.update({
   path: '/users/$userId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliceOfficersNewRoute = PoliceOfficersNewRouteImport.update({
+  id: '/police-officers/new',
+  path: '/police-officers/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliceOfficersOfficerIdRoute = PoliceOfficersOfficerIdRouteImport.update({
+  id: '/police-officers/$officerId',
+  path: '/police-officers/$officerId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationsNewRoute = OrganizationsNewRouteImport.update({
+  id: '/organizations/new',
+  path: '/organizations/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationsOrganizationIdRoute =
+  OrganizationsOrganizationIdRouteImport.update({
+    id: '/organizations/$organizationId',
+    path: '/organizations/$organizationId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
+  '/organizations/new': typeof OrganizationsNewRoute
+  '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
+  '/police-officers/new': typeof PoliceOfficersNewRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
+  '/organizations/': typeof OrganizationsIndexRoute
+  '/police-officers/': typeof PoliceOfficersIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
+  '/organizations/new': typeof OrganizationsNewRoute
+  '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
+  '/police-officers/new': typeof PoliceOfficersNewRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home': typeof HomeIndexRoute
+  '/organizations': typeof OrganizationsIndexRoute
+  '/police-officers': typeof PoliceOfficersIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
+  '/organizations/new': typeof OrganizationsNewRoute
+  '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
+  '/police-officers/new': typeof PoliceOfficersNewRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
+  '/organizations/': typeof OrganizationsIndexRoute
+  '/police-officers/': typeof PoliceOfficersIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/users/$userId' | '/users/new' | '/home/' | '/users/'
+  fullPaths:
+    | '/'
+    | '/organizations/$organizationId'
+    | '/organizations/new'
+    | '/police-officers/$officerId'
+    | '/police-officers/new'
+    | '/users/$userId'
+    | '/users/new'
+    | '/home/'
+    | '/organizations/'
+    | '/police-officers/'
+    | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/users/$userId' | '/users/new' | '/home' | '/users'
-  id: '__root__' | '/' | '/users/$userId' | '/users/new' | '/home/' | '/users/'
+  to:
+    | '/'
+    | '/organizations/$organizationId'
+    | '/organizations/new'
+    | '/police-officers/$officerId'
+    | '/police-officers/new'
+    | '/users/$userId'
+    | '/users/new'
+    | '/home'
+    | '/organizations'
+    | '/police-officers'
+    | '/users'
+  id:
+    | '__root__'
+    | '/'
+    | '/organizations/$organizationId'
+    | '/organizations/new'
+    | '/police-officers/$officerId'
+    | '/police-officers/new'
+    | '/users/$userId'
+    | '/users/new'
+    | '/home/'
+    | '/organizations/'
+    | '/police-officers/'
+    | '/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OrganizationsOrganizationIdRoute: typeof OrganizationsOrganizationIdRoute
+  OrganizationsNewRoute: typeof OrganizationsNewRoute
+  PoliceOfficersOfficerIdRoute: typeof PoliceOfficersOfficerIdRoute
+  PoliceOfficersNewRoute: typeof PoliceOfficersNewRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
   UsersNewRoute: typeof UsersNewRoute
   HomeIndexRoute: typeof HomeIndexRoute
+  OrganizationsIndexRoute: typeof OrganizationsIndexRoute
+  PoliceOfficersIndexRoute: typeof PoliceOfficersIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
 
@@ -93,6 +188,20 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users/'
       preLoaderRoute: typeof UsersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/police-officers/': {
+      id: '/police-officers/'
+      path: '/police-officers'
+      fullPath: '/police-officers/'
+      preLoaderRoute: typeof PoliceOfficersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organizations/': {
+      id: '/organizations/'
+      path: '/organizations'
+      fullPath: '/organizations/'
+      preLoaderRoute: typeof OrganizationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home/': {
@@ -116,14 +225,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersUserIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/police-officers/new': {
+      id: '/police-officers/new'
+      path: '/police-officers/new'
+      fullPath: '/police-officers/new'
+      preLoaderRoute: typeof PoliceOfficersNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/police-officers/$officerId': {
+      id: '/police-officers/$officerId'
+      path: '/police-officers/$officerId'
+      fullPath: '/police-officers/$officerId'
+      preLoaderRoute: typeof PoliceOfficersOfficerIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organizations/new': {
+      id: '/organizations/new'
+      path: '/organizations/new'
+      fullPath: '/organizations/new'
+      preLoaderRoute: typeof OrganizationsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organizations/$organizationId': {
+      id: '/organizations/$organizationId'
+      path: '/organizations/$organizationId'
+      fullPath: '/organizations/$organizationId'
+      preLoaderRoute: typeof OrganizationsOrganizationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OrganizationsOrganizationIdRoute: OrganizationsOrganizationIdRoute,
+  OrganizationsNewRoute: OrganizationsNewRoute,
+  PoliceOfficersOfficerIdRoute: PoliceOfficersOfficerIdRoute,
+  PoliceOfficersNewRoute: PoliceOfficersNewRoute,
   UsersUserIdRoute: UsersUserIdRoute,
   UsersNewRoute: UsersNewRoute,
   HomeIndexRoute: HomeIndexRoute,
+  OrganizationsIndexRoute: OrganizationsIndexRoute,
+  PoliceOfficersIndexRoute: PoliceOfficersIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport

@@ -7,11 +7,9 @@ import {
   createTheme,
   CssBaseline,
   PaletteMode,
-  IconButton,
-  Box,
-  useTheme,
 } from '@mui/material'
-import { useState, useMemo, createContext, useContext, useEffect } from 'react'
+import { useState, useMemo, createContext, useContext } from 'react'
+import { AppDrawer } from '../components/Drawer'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} })
 
@@ -82,10 +80,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <ColorModeContext.Provider value={colorMode}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <Box sx={{ minHeight: '100vh' }}>
-                <ThemeToggle />
-                {children}
-              </Box>
+              <AppDrawer>{children}</AppDrawer>
               <TanStackDevtools
                 config={{
                   position: 'bottom-right',
@@ -103,29 +98,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
-}
-
-function ThemeToggle() {
-  const theme = useTheme()
-  const colorMode = useContext(ColorModeContext)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
-
-  return (
-    <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 1000 }}>
-      <IconButton
-        onClick={colorMode.toggleColorMode}
-        color="inherit"
-        title="Toggle theme"
-      >
-        {theme.palette.mode === 'dark' ? '☀️' : '🌙'}
-      </IconButton>
-    </Box>
   )
 }

@@ -11,9 +11,8 @@ import {
   Alert,
   TextField,
   Avatar,
-  IconButton,
 } from '@mui/material'
-import { getUserById, deleteUser, updateUser } from '@/data/userService'
+import { getUserById, deleteUser, updateUser } from '@/data/users/userService'
 import { uploadAvatar } from '@/data/fileService'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
@@ -236,7 +235,9 @@ function UserDetailPage() {
                     alt={user.name}
                     sx={{ width: 80, height: 80 }}
                   >
-                    {!user.avatar && !avatarPreview && user.name[0].toUpperCase()}
+                    {!user.avatar &&
+                      !avatarPreview &&
+                      user.name[0].toUpperCase()}
                   </Avatar>
                   {isEditing && (
                     <Box>
@@ -248,8 +249,14 @@ function UserDetailPage() {
                         onChange={handleAvatarChange}
                       />
                       <label htmlFor="avatar-upload">
-                        <Button variant="outlined" component="span" size="small">
-                          {user.avatar || avatarFile ? 'Change Avatar' : 'Upload Avatar'}
+                        <Button
+                          variant="outlined"
+                          component="span"
+                          size="small"
+                        >
+                          {user.avatar || avatarFile
+                            ? 'Change Avatar'
+                            : 'Upload Avatar'}
                         </Button>
                       </label>
                     </Box>
