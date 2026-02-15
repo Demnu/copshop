@@ -18,7 +18,6 @@ import { Route as UsersNewRouteImport } from './routes/users/new'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
 import { Route as PoliceOfficersNewRouteImport } from './routes/police-officers/new'
 import { Route as PoliceOfficersOfficerIdRouteImport } from './routes/police-officers/$officerId'
-import { Route as OrganizationsNewRouteImport } from './routes/organizations/new'
 import { Route as OrganizationsOrganizationIdRouteImport } from './routes/organizations/$organizationId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -66,11 +65,6 @@ const PoliceOfficersOfficerIdRoute = PoliceOfficersOfficerIdRouteImport.update({
   path: '/police-officers/$officerId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OrganizationsNewRoute = OrganizationsNewRouteImport.update({
-  id: '/organizations/new',
-  path: '/organizations/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const OrganizationsOrganizationIdRoute =
   OrganizationsOrganizationIdRouteImport.update({
     id: '/organizations/$organizationId',
@@ -81,7 +75,6 @@ const OrganizationsOrganizationIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
-  '/organizations/new': typeof OrganizationsNewRoute
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
   '/users/$userId': typeof UsersUserIdRoute
@@ -94,7 +87,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
-  '/organizations/new': typeof OrganizationsNewRoute
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
   '/users/$userId': typeof UsersUserIdRoute
@@ -108,7 +100,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
-  '/organizations/new': typeof OrganizationsNewRoute
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
   '/users/$userId': typeof UsersUserIdRoute
@@ -123,7 +114,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/organizations/$organizationId'
-    | '/organizations/new'
     | '/police-officers/$officerId'
     | '/police-officers/new'
     | '/users/$userId'
@@ -136,7 +126,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/organizations/$organizationId'
-    | '/organizations/new'
     | '/police-officers/$officerId'
     | '/police-officers/new'
     | '/users/$userId'
@@ -149,7 +138,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/organizations/$organizationId'
-    | '/organizations/new'
     | '/police-officers/$officerId'
     | '/police-officers/new'
     | '/users/$userId'
@@ -163,7 +151,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OrganizationsOrganizationIdRoute: typeof OrganizationsOrganizationIdRoute
-  OrganizationsNewRoute: typeof OrganizationsNewRoute
   PoliceOfficersOfficerIdRoute: typeof PoliceOfficersOfficerIdRoute
   PoliceOfficersNewRoute: typeof PoliceOfficersNewRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
@@ -239,13 +226,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PoliceOfficersOfficerIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/organizations/new': {
-      id: '/organizations/new'
-      path: '/organizations/new'
-      fullPath: '/organizations/new'
-      preLoaderRoute: typeof OrganizationsNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/organizations/$organizationId': {
       id: '/organizations/$organizationId'
       path: '/organizations/$organizationId'
@@ -259,7 +239,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OrganizationsOrganizationIdRoute: OrganizationsOrganizationIdRoute,
-  OrganizationsNewRoute: OrganizationsNewRoute,
   PoliceOfficersOfficerIdRoute: PoliceOfficersOfficerIdRoute,
   PoliceOfficersNewRoute: PoliceOfficersNewRoute,
   UsersUserIdRoute: UsersUserIdRoute,

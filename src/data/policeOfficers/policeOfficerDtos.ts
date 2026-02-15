@@ -1,33 +1,14 @@
-import type { PoliceOfficer, VerificationStatus } from '../schema'
+import type { PoliceOfficer } from '../schema'
 
-export type PoliceOfficerDto = PoliceOfficer
+export type PoliceOfficerDto = PoliceOfficer & {
+  organizationName?: string
+}
 
-export type PoliceOfficerListDto = {
+export type PaginatedPoliceOfficerDtos = {
   officers: PoliceOfficerDto[]
   total: number
   page: number
   limit: number
-}
-
-export type CreatePoliceOfficerDto = {
-  firstName?: string
-  lastName?: string
-  badgeNumber?: string
-  rank?: string
-  organizationId?: number
-  verificationStatus?: VerificationStatus
-  estimatedDob?: string
-}
-
-export type UpdatePoliceOfficerDto = {
-  officerId: number
-  firstName?: string
-  lastName?: string
-  badgeNumber?: string
-  rank?: string
-  organizationId?: number
-  verificationStatus?: VerificationStatus
-  estimatedDob?: string
 }
 
 export type DeletePoliceOfficerDto = {

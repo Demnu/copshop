@@ -12,7 +12,9 @@ import {
   TextField,
   Avatar,
 } from '@mui/material'
-import { getUserById, deleteUser, updateUser } from '@/data/users/userService'
+import { getUserById } from '@/data/users/getUserById'
+import { deleteUser } from '@/data/users/deleteUser'
+import { updateUser } from '@/data/users/updateUser'
 import { uploadAvatar } from '@/data/fileService'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
@@ -212,7 +214,7 @@ function UserDetailPage() {
         {updateUserMutation.isError && (
           <MutationError
             error={updateUserMutation.error}
-            action="update user"
+            errorMessage="update user"
           />
         )}
         {updateUserMutation.isSuccess && !isEditing && (
@@ -221,7 +223,7 @@ function UserDetailPage() {
         {deleteUserMutation.isError && (
           <MutationError
             error={deleteUserMutation.error}
-            action="delete user"
+            errorMessage="delete user"
           />
         )}
 

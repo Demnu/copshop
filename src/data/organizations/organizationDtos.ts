@@ -1,5 +1,12 @@
 import type { Organization } from '../schema'
 
+/**
+ * DTOs for organization endpoints.
+ * - OrganizationDto: The main organization data transfer object
+ * - OrganizationListDto: Paginated list response
+ * - DeleteOrganizationDto: Delete operation response
+ */
+
 export type OrganizationDto = Organization
 
 export type OrganizationListDto = {
@@ -7,17 +14,4 @@ export type OrganizationListDto = {
   total: number
   page: number
   limit: number
-}
-
-export type CreateOrganizationDto = {
-  name: string
-}
-
-export type UpdateOrganizationDto = {
-  organizationId: number
-  name: string
-}
-
-export type DeleteOrganizationDto = {
-  success: boolean
 }

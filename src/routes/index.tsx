@@ -18,7 +18,8 @@ import {
   Grid,
 } from '@mui/material'
 import { getGreeting } from '@/data/serverFunctions'
-import { getUsers, createUser } from '@/data/users/userService'
+import { getUsers } from '@/data/users/getUsers'
+import { createUser } from '@/data/users/createUser'
 import { queryKeys } from '@/lib/queryKeys'
 
 export const Route = createFileRoute('/')({ component: App })

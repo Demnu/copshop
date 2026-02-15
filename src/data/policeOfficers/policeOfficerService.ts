@@ -5,7 +5,7 @@ import {
   policeOfficers,
   organizations,
   type NewPoliceOfficer,
-  VerificationStatus,
+  PoliceOfficerVerificationStatus,
 } from '../schema'
 import { eq, desc, count } from 'drizzle-orm'
 import {
@@ -14,47 +14,26 @@ import {
 } from '../paginationHelpers'
 import type {
   PoliceOfficerDto,
-  PoliceOfficerListDto,
+  PaginatedPoliceOfficerDtos,
   DeletePoliceOfficerDto,
 } from './policeOfficerDtos'
 
 // Get police officer by ID with organization details
 export const getPoliceOfficerById = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ officerId: z.number() }))
-  .handler(
-    async (
-      ctx,
-    ): Promise<
-      | (PoliceOfficerDto & { organization?: { id: number; name: string } })
-      | null
-    > => {
-      const [result] = await db
-        .select({
-          officer: policeOfficers,
-          organization: {
-            id: organizations.id,
-            name: organizations.name,
-          },
-        })
-        .from(policeOfficers)
-        .leftJoin(
-          organizations,
-          eq(policeOfficers.organizationId, organizations.id),
-        )
-        .where(eq(policeOfficers.id, ctx.data.officerId))
-        .limit(1)
+  .handler(async (ctx): Promise<PoliceOfficerDto> => {
+    const officer = await db.query.policeOfficers.findFirst({
+      where: eq(policeOfficers.id, ctx.data.officerId),
+      with: { organization: true },
+    })
 
-      if (!result) return null
+    if (!officer) throw Error('Police Officer could not be found')
 
-      return {
-        ...result.officer,
-        organization:
-          result.organization && result.organization.id
-            ? result.organization
-            : undefined,
-      }
-    },
-  )
+    return {
+      ...officer,
+      organizationName: officer.organization?.name,
+    }
+  })
 
 // Get all police officers with optional organization filter (for dropdowns, etc.)
 export const getAllPoliceOfficers = createServerFn({ method: 'GET' })
@@ -64,16 +43,15 @@ export const getAllPoliceOfficers = createServerFn({ method: 'GET' })
     }),
   )
   .handler(async (ctx): Promise<PoliceOfficerDto[]> => {
-    let query = db.select().from(policeOfficers).$dynamic()
-
-    if (ctx.data.organizationId) {
-      query = query.where(
-        eq(policeOfficers.organizationId, ctx.data.organizationId),
-      )
-    }
-
-    const officers = await query.orderBy(desc(policeOfficers.createdAt))
-
+    const officers = await db.query.policeOfficers.findMany({
+      where: (fields, { eq, and }) =>
+        and(
+          ctx.data.organizationId
+            ? eq(fields.organizationId, ctx.data.organizationId)
+            : undefined,
+        ),
+      orderBy: (fields, { asc }) => [asc(fields.firstName)],
+    })
     return officers
   })
 
@@ -84,7 +62,7 @@ export const getPoliceOfficers = createServerFn({ method: 'GET' })
       organizationId: z.number().optional(),
     }),
   )
-  .handler(async (ctx): Promise<PoliceOfficerListDto> => {
+  .handler(async (ctx): Promise<PaginatedPoliceOfficerDtos> => {
     const offset = getPaginationOffset(ctx.data.page, ctx.data.limit)
 
     let dataQuery = db
@@ -158,7 +136,8 @@ export const createPoliceOfficer = createServerFn({ method: 'POST' })
       rank: ctx.data.rank,
       organizationId: ctx.data.organizationId,
       verificationStatus:
-        ctx.data.verificationStatus || VerificationStatus.UNVERIFIED,
+        ctx.data.verificationStatus ||
+        PoliceOfficerVerificationStatus.UNVERIFIED,
       estimatedDob: ctx.data.estimatedDob,
     }
 
@@ -182,9 +161,9 @@ export const updatePoliceOfficer = createServerFn({ method: 'POST' })
       organizationId: z.number().nullable().optional(),
       verificationStatus: z
         .enum([
-          VerificationStatus.CONFIRMED,
-          VerificationStatus.SUSPECTED,
-          VerificationStatus.UNVERIFIED,
+          PoliceOfficerVerificationStatus.CONFIRMED,
+          PoliceOfficerVerificationStatus.SUSPECTED,
+          PoliceOfficerVerificationStatus.UNVERIFIED,
         ])
         .optional(),
       estimatedDob: z.string().optional(),

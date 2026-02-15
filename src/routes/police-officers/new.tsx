@@ -13,10 +13,10 @@ import {
   InputLabel,
   Select,
 } from '@mui/material'
-import { createPoliceOfficer } from '@/data/policeOfficers/policeOfficerService'
-import { getAllOrganizations } from '@/data/organizations/organizationService'
-import { VerificationStatus } from '@/data/schema'
-import type { VerificationStatus as VerificationStatusType } from '@/data/schema'
+import { createPoliceOfficer } from '@/data/policeOfficers/createPoliceOfficer'
+import { getAllOrganizations } from '@/data/organizations/getAllOrganizations'
+import { PoliceOfficerVerificationStatus } from '@/data/schema'
+import type { PoliceOfficerVerificationStatus as VerificationStatusType } from '@/data/schema'
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { MutationError } from '@/components/MutationError'
@@ -48,7 +48,7 @@ function CreatePoliceOfficerPage() {
     undefined,
   )
   const [verificationStatus, setVerificationStatus] =
-    useState<VerificationStatusType>(VerificationStatus.UNVERIFIED)
+    useState<VerificationStatusType>(PoliceOfficerVerificationStatus.UNVERIFIED)
   const [estimatedDob, setEstimatedDob] = useState('')
 
   const { data: organizations } = useQuery({
@@ -168,13 +168,13 @@ function CreatePoliceOfficerPage() {
                   }
                   label="Verification Status"
                 >
-                  <MenuItem value={VerificationStatus.UNVERIFIED}>
+                  <MenuItem value={PoliceOfficerVerificationStatus.UNVERIFIED}>
                     Unverified
                   </MenuItem>
-                  <MenuItem value={VerificationStatus.SUSPECTED}>
+                  <MenuItem value={PoliceOfficerVerificationStatus.SUSPECTED}>
                     Suspected
                   </MenuItem>
-                  <MenuItem value={VerificationStatus.CONFIRMED}>
+                  <MenuItem value={PoliceOfficerVerificationStatus.CONFIRMED}>
                     Confirmed
                   </MenuItem>
                 </Select>
@@ -186,13 +186,12 @@ function CreatePoliceOfficerPage() {
                 value={estimatedDob}
                 onChange={(e) => setEstimatedDob(e.target.value)}
                 fullWidth
-                InputLabelProps={{ shrink: true }}
               />
 
               {createOfficerMutation.error && (
                 <MutationError
                   error={createOfficerMutation.error}
-                  action="create police officer"
+                  errorMessage="create police officer"
                 />
               )}
 

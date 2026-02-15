@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Button, Avatar, Chip } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { getUsers } from '@/data/users/userService'
+import { getUsers } from '@/data/users/getUsers'
 import type { UserDto } from '@/data/users/userDtos'
 import { PageContainer } from '@/components/PageContainer'
 import { PageHeader } from '@/components/PageHeader'

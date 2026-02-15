@@ -1,5 +1,6 @@
 import { useState, ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
+import type { LinkProps } from '@tanstack/react-router'
 import {
   Drawer,
   List,
@@ -21,9 +22,19 @@ import HomeIcon from '@mui/icons-material/Home'
 import BusinessIcon from '@mui/icons-material/Business'
 import BadgeIcon from '@mui/icons-material/Badge'
 import PeopleIcon from '@mui/icons-material/People'
+import EventIcon from '@mui/icons-material/Event'
 import { useColorMode } from '../routes/__root'
 
+// Type-safe route paths from TanStack Router
+type AppRoutes = LinkProps['to']
+
 const drawerWidth = 250
+
+interface MenuItem {
+  label: string
+  icon: ReactNode
+  to: AppRoutes
+}
 
 interface AppDrawerProps {
   children: ReactNode
@@ -38,20 +49,20 @@ export function AppDrawer({ children }: AppDrawerProps) {
     setOpen(!open)
   }
 
-  const menuItems = [
-    { label: 'Home', icon: <HomeIcon />, to: '/home' as const },
+  const menuItems: readonly MenuItem[] = [
+    { label: 'Home', icon: <HomeIcon />, to: '/home' },
     {
       label: 'Organizations',
       icon: <BusinessIcon />,
-      to: '/organizations' as const,
+      to: '/organizations',
     },
     {
       label: 'Police Officers',
       icon: <BadgeIcon />,
-      to: '/police-officers' as const,
+      to: '/police-officers',
     },
-    { label: 'Users', icon: <PeopleIcon />, to: '/users' as const },
-  ]
+    { label: 'Users', icon: <PeopleIcon />, to: '/users' },
+  ] as const
 
   return (
     <Box sx={{ display: 'flex' }}>

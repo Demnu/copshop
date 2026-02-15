@@ -31,6 +31,13 @@ export const Route = createRootRoute({
         title: 'CopShop - TanStack Start',
       },
     ],
+    links: [
+      {
+        rel: 'preload',
+        href: '/bloody_hands.png',
+        as: 'image',
+      },
+    ],
   }),
 
   shellComponent: RootDocument,

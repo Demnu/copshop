@@ -2,14 +2,11 @@ import { Alert, Typography } from '@mui/material'
 
 interface MutationErrorProps {
   error: unknown
-  action?: string
+  errorMessage: string
 }
 
-export function MutationError({
-  error,
-  action = 'perform action',
-}: MutationErrorProps) {
-  const errorMessage =
+export function MutationError({ error, errorMessage }: MutationErrorProps) {
+  const msg =
     error instanceof Error
       ? error.message
       : typeof error === 'string'
@@ -17,11 +14,11 @@ export function MutationError({
         : 'An unexpected error occurred. Please try again.'
 
   return (
-    <Alert severity="error">
+    <Alert severity="error" sx={{ borderRadius: 2 }}>
       <Typography variant="subtitle2" gutterBottom>
-        Failed to {action}
+        Failed to {errorMessage}
       </Typography>
-      <Typography variant="body2">{errorMessage}</Typography>
+      <Typography variant="body2">{msg}</Typography>
     </Alert>
   )
 }

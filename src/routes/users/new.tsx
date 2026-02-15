@@ -9,7 +9,7 @@ import {
   Button,
   Box,
 } from '@mui/material'
-import { createUser } from '@/data/users/userService'
+import { createUser } from '@/data/users/createUser'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { MutationError } from '@/components/MutationError'
@@ -63,7 +63,7 @@ function CreateUserPage() {
         {createUserMutation.isError && (
           <MutationError
             error={createUserMutation.error}
-            action="create user"
+            errorMessage="create user"
           />
         )}
 

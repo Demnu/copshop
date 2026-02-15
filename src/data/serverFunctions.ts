@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getPoliceOfficerById } from './policeOfficers/policeOfficerService'
-import { getOrganizationById } from './organizations/organizationService'
+import { getPoliceOfficerById } from './policeOfficers/getPoliceOfficerById'
+import { getOrganizationById } from './organizations/getOrganizationById'
 
 // Simple greeting server function for demos
 export const getGreeting = createServerFn({ method: 'GET' })

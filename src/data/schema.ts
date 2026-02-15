@@ -11,14 +11,14 @@ export const UserRole = {
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
-export const VerificationStatus = {
+export const PoliceOfficerVerificationStatus = {
   CONFIRMED: 'confirmed',
   SUSPECTED: 'suspected',
   UNVERIFIED: 'unverified',
 } as const
 
-export type VerificationStatus =
-  (typeof VerificationStatus)[keyof typeof VerificationStatus]
+export type PoliceOfficerVerificationStatus =
+  (typeof PoliceOfficerVerificationStatus)[keyof typeof PoliceOfficerVerificationStatus]
 
 export const EventStatus = {
   DRAFT: 'draft',
