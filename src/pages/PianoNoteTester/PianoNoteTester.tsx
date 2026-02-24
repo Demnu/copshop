@@ -1,27 +1,16 @@
 import { useState, useEffect } from 'react'
-import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano'
-import 'react-piano/dist/styles.css'
 import { GovUKButton } from '@/components/govuk/GovUKButton'
 import { GovUKInput } from '@/components/govuk/GovUKInput'
 import { GovUKBody } from '@/components/govuk/GovUKBody'
 import { GovUKSectionHeading } from '@/components/govuk/GovUKSectionHeading'
 import { GovUKTag } from '@/components/govuk/GovUKTag'
+import { GovUKCheckbox } from '@/components/govuk/GovUKCheckbox'
 import { PageContainer } from '@/components/PageContainer'
 import { PageHeader } from '@/components/PageHeader'
+import { SimplePiano } from './SimplePiano'
 
 // C Major scale notes (no flats)
 const C_MAJOR_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
-
-// Map note names to MIDI numbers (using middle octave C4-B4)
-const NOTE_TO_MIDI: Record<string, number> = {
-  C: 60, // C4
-  D: 62, // D4
-  E: 64, // E4
-  F: 65, // F4
-  G: 67, // G4
-  A: 69, // A4
-  B: 71, // B4
-}
 
 type GameState = 'setup' | 'playing' | 'won' | 'lost' | 'finished'
 
@@ -33,7 +22,7 @@ interface Game {
   timeRemaining: number
   score: number
   currentRound: number
-  pianoWidth: number
+  showNotes: boolean
 }
 
 export function PianoNoteTester() {
@@ -45,28 +34,8 @@ export function PianoNoteTester() {
     timeRemaining: 0,
     score: 0,
     currentRound: 0,
-    pianoWidth: 800,
+    showNotes: false,
   })
-
-  // Piano range (2 octaves from C4 to C6)
-  const firstNote = MidiNumbers.fromNote('c4')
-  const lastNote = MidiNumbers.fromNote('c6')
-
-  // Handle responsive piano width
-  useEffect(() => {
-    const updatePianoWidth = () => {
-      if (typeof window !== 'undefined') {
-        setGame((prev) => ({
-          ...prev,
-          pianoWidth: Math.min(window.innerWidth - 40, 800),
-        }))
-      }
-    }
-
-    updatePianoWidth()
-    window.addEventListener('resize', updatePianoWidth)
-    return () => window.removeEventListener('resize', updatePianoWidth)
-  }, [])
 
   const pickRandomNote = () => {
     const randomIndex = Math.floor(Math.random() * C_MAJOR_NOTES.length)
@@ -111,15 +80,10 @@ export function PianoNoteTester() {
     }
   }
 
-  const onPlayNote = (midiNumber: number) => {
+  const onPlayNote = (note: string) => {
     if (game.state !== 'playing') return
 
-    // Find which note was played
-    const playedNote = Object.entries(NOTE_TO_MIDI).find(
-      ([_, midi]) => midi === midiNumber || midi + 12 === midiNumber, // Allow any octave
-    )?.[0]
-
-    if (playedNote === game.targetNote) {
+    if (note === game.targetNote) {
       setGame((prev) => ({
         ...prev,
         score: prev.score + 1,
@@ -354,6 +318,25 @@ export function PianoNoteTester() {
                 />
               </div>
             </div>
+            <div
+              style={{
+                maxWidth: '600px',
+                margin: '20px auto 0',
+                textAlign: 'center',
+              }}
+            >
+              <GovUKCheckbox
+                label="🎵 Show note labels on keys"
+                checked={game.showNotes}
+                onChange={(e) =>
+                  setGame((prev) => ({
+                    ...prev,
+                    showNotes: e.target.checked,
+                  }))
+                }
+                id="show-notes"
+              />
+            </div>
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
               <GovUKButton onClick={startGame}>▶️ Start Game</GovUKButton>
             </div>
@@ -425,17 +408,6 @@ export function PianoNoteTester() {
                     <strong style={{ fontSize: '32px' }}>
                       {game.targetNote}
                     </strong>
-                  </GovUKBody>
-                </div>
-                <div>
-                  <div
-                    className="piano-result-score"
-                    style={{ color: '#d4351c' }}
-                  >
-                    {game.score}/{game.currentRound}
-                  </div>
-                  <GovUKBody size="s" marginBottom={0}>
-                    {Math.round((game.score / game.currentRound) * 100)}%
                   </GovUKBody>
                 </div>
               </div>
@@ -528,25 +500,14 @@ export function PianoNoteTester() {
             </div>
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'center',
-                overflowX: 'auto',
                 pointerEvents: game.state === 'playing' ? 'auto' : 'none',
                 opacity: game.state === 'playing' ? 1 : 0.6,
               }}
             >
-              <Piano
-                key={`piano-${game.currentRound}-${game.state}`}
-                noteRange={{ first: firstNote, last: lastNote }}
-                playNote={onPlayNote}
-                stopNote={() => {}}
-                width={game.pianoWidth}
+              <SimplePiano
+                onNoteClick={onPlayNote}
                 disabled={game.state !== 'playing'}
-                keyboardShortcuts={KeyboardShortcuts.create({
-                  firstNote: firstNote,
-                  lastNote: lastNote,
-                  keyboardConfig: KeyboardShortcuts.HOME_ROW,
-                })}
+                showNotes={game.showNotes}
               />
             </div>
           </div>
