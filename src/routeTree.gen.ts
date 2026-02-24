@@ -11,11 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
+import { Route as RecipesIndexRouteImport } from './routes/recipes/index'
 import { Route as PoliceOfficersIndexRouteImport } from './routes/police-officers/index'
+import { Route as PianoNoteTesterIndexRouteImport } from './routes/piano-note-tester/index'
 import { Route as OrganizationsIndexRouteImport } from './routes/organizations/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as UsersNewRouteImport } from './routes/users/new'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
+import { Route as RecipesRecipeIdRouteImport } from './routes/recipes/$recipeId'
 import { Route as PoliceOfficersNewRouteImport } from './routes/police-officers/new'
 import { Route as PoliceOfficersOfficerIdRouteImport } from './routes/police-officers/$officerId'
 import { Route as OrganizationsOrganizationIdRouteImport } from './routes/organizations/$organizationId'
@@ -30,9 +33,19 @@ const UsersIndexRoute = UsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecipesIndexRoute = RecipesIndexRouteImport.update({
+  id: '/recipes/',
+  path: '/recipes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PoliceOfficersIndexRoute = PoliceOfficersIndexRouteImport.update({
   id: '/police-officers/',
   path: '/police-officers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PianoNoteTesterIndexRoute = PianoNoteTesterIndexRouteImport.update({
+  id: '/piano-note-tester/',
+  path: '/piano-note-tester/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrganizationsIndexRoute = OrganizationsIndexRouteImport.update({
@@ -53,6 +66,11 @@ const UsersNewRoute = UsersNewRouteImport.update({
 const UsersUserIdRoute = UsersUserIdRouteImport.update({
   id: '/users/$userId',
   path: '/users/$userId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecipesRecipeIdRoute = RecipesRecipeIdRouteImport.update({
+  id: '/recipes/$recipeId',
+  path: '/recipes/$recipeId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PoliceOfficersNewRoute = PoliceOfficersNewRouteImport.update({
@@ -77,11 +95,14 @@ export interface FileRoutesByFullPath {
   '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
+  '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
   '/organizations/': typeof OrganizationsIndexRoute
+  '/piano-note-tester/': typeof PianoNoteTesterIndexRoute
   '/police-officers/': typeof PoliceOfficersIndexRoute
+  '/recipes/': typeof RecipesIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -89,11 +110,14 @@ export interface FileRoutesByTo {
   '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
+  '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home': typeof HomeIndexRoute
   '/organizations': typeof OrganizationsIndexRoute
+  '/piano-note-tester': typeof PianoNoteTesterIndexRoute
   '/police-officers': typeof PoliceOfficersIndexRoute
+  '/recipes': typeof RecipesIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
@@ -102,11 +126,14 @@ export interface FileRoutesById {
   '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
+  '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
   '/organizations/': typeof OrganizationsIndexRoute
+  '/piano-note-tester/': typeof PianoNoteTesterIndexRoute
   '/police-officers/': typeof PoliceOfficersIndexRoute
+  '/recipes/': typeof RecipesIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRouteTypes {
@@ -116,11 +143,14 @@ export interface FileRouteTypes {
     | '/organizations/$organizationId'
     | '/police-officers/$officerId'
     | '/police-officers/new'
+    | '/recipes/$recipeId'
     | '/users/$userId'
     | '/users/new'
     | '/home/'
     | '/organizations/'
+    | '/piano-note-tester/'
     | '/police-officers/'
+    | '/recipes/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,11 +158,14 @@ export interface FileRouteTypes {
     | '/organizations/$organizationId'
     | '/police-officers/$officerId'
     | '/police-officers/new'
+    | '/recipes/$recipeId'
     | '/users/$userId'
     | '/users/new'
     | '/home'
     | '/organizations'
+    | '/piano-note-tester'
     | '/police-officers'
+    | '/recipes'
     | '/users'
   id:
     | '__root__'
@@ -140,11 +173,14 @@ export interface FileRouteTypes {
     | '/organizations/$organizationId'
     | '/police-officers/$officerId'
     | '/police-officers/new'
+    | '/recipes/$recipeId'
     | '/users/$userId'
     | '/users/new'
     | '/home/'
     | '/organizations/'
+    | '/piano-note-tester/'
     | '/police-officers/'
+    | '/recipes/'
     | '/users/'
   fileRoutesById: FileRoutesById
 }
@@ -153,11 +189,14 @@ export interface RootRouteChildren {
   OrganizationsOrganizationIdRoute: typeof OrganizationsOrganizationIdRoute
   PoliceOfficersOfficerIdRoute: typeof PoliceOfficersOfficerIdRoute
   PoliceOfficersNewRoute: typeof PoliceOfficersNewRoute
+  RecipesRecipeIdRoute: typeof RecipesRecipeIdRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
   UsersNewRoute: typeof UsersNewRoute
   HomeIndexRoute: typeof HomeIndexRoute
   OrganizationsIndexRoute: typeof OrganizationsIndexRoute
+  PianoNoteTesterIndexRoute: typeof PianoNoteTesterIndexRoute
   PoliceOfficersIndexRoute: typeof PoliceOfficersIndexRoute
+  RecipesIndexRoute: typeof RecipesIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
 
@@ -177,11 +216,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recipes/': {
+      id: '/recipes/'
+      path: '/recipes'
+      fullPath: '/recipes/'
+      preLoaderRoute: typeof RecipesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/police-officers/': {
       id: '/police-officers/'
       path: '/police-officers'
       fullPath: '/police-officers/'
       preLoaderRoute: typeof PoliceOfficersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/piano-note-tester/': {
+      id: '/piano-note-tester/'
+      path: '/piano-note-tester'
+      fullPath: '/piano-note-tester/'
+      preLoaderRoute: typeof PianoNoteTesterIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/organizations/': {
@@ -210,6 +263,13 @@ declare module '@tanstack/react-router' {
       path: '/users/$userId'
       fullPath: '/users/$userId'
       preLoaderRoute: typeof UsersUserIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recipes/$recipeId': {
+      id: '/recipes/$recipeId'
+      path: '/recipes/$recipeId'
+      fullPath: '/recipes/$recipeId'
+      preLoaderRoute: typeof RecipesRecipeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/police-officers/new': {
@@ -241,11 +301,14 @@ const rootRouteChildren: RootRouteChildren = {
   OrganizationsOrganizationIdRoute: OrganizationsOrganizationIdRoute,
   PoliceOfficersOfficerIdRoute: PoliceOfficersOfficerIdRoute,
   PoliceOfficersNewRoute: PoliceOfficersNewRoute,
+  RecipesRecipeIdRoute: RecipesRecipeIdRoute,
   UsersUserIdRoute: UsersUserIdRoute,
   UsersNewRoute: UsersNewRoute,
   HomeIndexRoute: HomeIndexRoute,
   OrganizationsIndexRoute: OrganizationsIndexRoute,
+  PianoNoteTesterIndexRoute: PianoNoteTesterIndexRoute,
   PoliceOfficersIndexRoute: PoliceOfficersIndexRoute,
+  RecipesIndexRoute: RecipesIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
