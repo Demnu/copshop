@@ -1,6 +1,4 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import {
   ThemeProvider,
@@ -8,7 +6,7 @@ import {
   CssBaseline,
   PaletteMode,
 } from '@mui/material'
-import { useState, useMemo, createContext, useContext } from 'react'
+import { useState, useMemo, createContext, useContext, useEffect } from 'react'
 import { AppDrawer } from '../components/Drawer'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} })
@@ -17,7 +15,20 @@ export const useColorMode = () => useContext(ColorModeContext)
 
 const queryClient = new QueryClient()
 
+function NotFound() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
+      <p className="text-lg mb-4">The page you're looking for doesn't exist.</p>
+      <a href="/" className="text-blue-600 hover:underline">
+        Go back home
+      </a>
+    </div>
+  )
+}
+
 export const Route = createRootRoute({
+  notFoundComponent: NotFound,
   head: () => ({
     meta: [
       {
@@ -30,12 +41,40 @@ export const Route = createRootRoute({
       {
         title: 'CopShop - TanStack Start',
       },
+      {
+        name: 'description',
+        content: 'Manage police officers, organizations, and recipes',
+      },
+      {
+        name: 'theme-color',
+        content: '#667eea',
+      },
+      {
+        name: 'apple-mobile-web-app-capable',
+        content: 'yes',
+      },
+      {
+        name: 'apple-mobile-web-app-status-bar-style',
+        content: 'black-translucent',
+      },
+      {
+        name: 'apple-mobile-web-app-title',
+        content: 'CopShop',
+      },
     ],
     links: [
       {
         rel: 'preload',
         href: '/bloody_hands.png',
         as: 'image',
+      },
+      {
+        rel: 'manifest',
+        href: '/manifest.json',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: '/logo192.png',
       },
     ],
   }),
@@ -44,7 +83,7 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<PaletteMode>('dark')
+  const [mode, setMode] = useState<PaletteMode>('light')
 
   const colorMode = useMemo(
     () => ({
@@ -77,6 +116,22 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     [mode],
   )
 
+  // Register service worker for PWA
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration.scope)
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error)
+          })
+      })
+    }
+  }, [])
+
   return (
     <html lang="en">
       <head>
@@ -88,7 +143,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <AppDrawer>{children}</AppDrawer>
-              <TanStackDevtools
+              {/* <TanStackDevtools
                 config={{
                   position: 'bottom-right',
                 }}
@@ -98,7 +153,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                     render: <TanStackRouterDevtoolsPanel />,
                   },
                 ]}
-              />
+              /> */}
             </ThemeProvider>
           </ColorModeContext.Provider>
         </QueryClientProvider>

@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react'
+import { useState, ReactNode, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import type { LinkProps } from '@tanstack/react-router'
 import {
@@ -13,16 +13,16 @@ import {
   Typography,
   Divider,
   useTheme,
+  useMediaQuery,
   AppBar,
   Toolbar,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import HomeIcon from '@mui/icons-material/Home'
-import BusinessIcon from '@mui/icons-material/Business'
-import BadgeIcon from '@mui/icons-material/Badge'
 import PeopleIcon from '@mui/icons-material/People'
-import EventIcon from '@mui/icons-material/Event'
+import RestaurantIcon from '@mui/icons-material/Restaurant'
+import PianoIcon from '@mui/icons-material/Piano'
 import { useColorMode } from '../routes/__root'
 
 // Type-safe route paths from TanStack Router
@@ -44,6 +44,14 @@ export function AppDrawer({ children }: AppDrawerProps) {
   const [open, setOpen] = useState(true)
   const theme = useTheme()
   const colorMode = useColorMode()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  // Save drawer state to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('drawer-open', JSON.stringify(open))
+    }
+  }, [open])
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -51,17 +59,13 @@ export function AppDrawer({ children }: AppDrawerProps) {
 
   const menuItems: readonly MenuItem[] = [
     { label: 'Home', icon: <HomeIcon />, to: '/home' },
-    {
-      label: 'Organizations',
-      icon: <BusinessIcon />,
-      to: '/organizations',
-    },
-    {
-      label: 'Police Officers',
-      icon: <BadgeIcon />,
-      to: '/police-officers',
-    },
     { label: 'Users', icon: <PeopleIcon />, to: '/users' },
+    { label: 'Recipes', icon: <RestaurantIcon />, to: '/recipes' },
+    {
+      label: 'Piano Note Tester',
+      icon: <PianoIcon />,
+      to: '/piano-note-tester',
+    },
   ] as const
 
   return (
@@ -89,7 +93,7 @@ export function AppDrawer({ children }: AppDrawerProps) {
             component="div"
             sx={{ flexGrow: 1, fontWeight: 700 }}
           >
-            CopShop
+            Enablar
           </Typography>
           <IconButton
             onClick={colorMode.toggleColorMode}
@@ -135,6 +139,11 @@ export function AppDrawer({ children }: AppDrawerProps) {
           <List>
             {menuItems.map((item) => (
               <Link
+                onClick={() => {
+                  if (isMobile) {
+                    setOpen(false)
+                  }
+                }}
                 key={item.to}
                 to={item.to}
                 style={{ textDecoration: 'none', color: 'inherit' }}

@@ -12,6 +12,8 @@ import HomeIcon from '@mui/icons-material/Home'
 import BusinessIcon from '@mui/icons-material/Business'
 import BadgeIcon from '@mui/icons-material/Badge'
 import PeopleIcon from '@mui/icons-material/People'
+import RestaurantIcon from '@mui/icons-material/Restaurant'
+import CodeIcon from '@mui/icons-material/Code'
 import { useColorMode } from '../routes/__root'
 
 export function TopBar() {
@@ -59,6 +61,16 @@ export function TopBar() {
           <Link to="/users">
             <Button color="inherit" startIcon={<PeopleIcon />}>
               Users
+            </Button>
+          </Link>
+          <Link to="/recipes">
+            <Button color="inherit" startIcon={<RestaurantIcon />}>
+              Recipes
+            </Button>
+          </Link>
+          <Link to="/code-generator">
+            <Button color="inherit" startIcon={<CodeIcon />}>
+              Generator
             </Button>
           </Link>
         </Box>
