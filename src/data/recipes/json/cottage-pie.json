@@ -1,0 +1,66 @@
+{
+  "id": "cottage-pie",
+  "name": "Cottage Pie",
+  "ingredients": [
+    {
+      "ingredient": "1kg beef mince",
+      "checked": false
+    },
+    {
+      "ingredient": "2 onions",
+      "checked": false
+    },
+    {
+      "ingredient": "3-4 carrots",
+      "checked": false
+    },
+    {
+      "ingredient": "1-1.5 cups frozen peas",
+      "checked": false
+    },
+    {
+      "ingredient": "3-4 cloves garlic (or garlic paste)",
+      "checked": false
+    },
+    {
+      "ingredient": "Tomato paste",
+      "checked": false
+    },
+    {
+      "ingredient": "Worcestershire sauce",
+      "checked": false
+    },
+    {
+      "ingredient": "Splash soy sauce (optional)",
+      "checked": false
+    },
+    {
+      "ingredient": "Salt",
+      "checked": false
+    },
+    {
+      "ingredient": "Black pepper",
+      "checked": false
+    },
+    {
+      "ingredient": "Dried thyme or mixed herbs (optional)",
+      "checked": false
+    },
+    {
+      "ingredient": "Beef or chicken stock (cube or liquid)",
+      "checked": false
+    },
+    {
+      "ingredient": "~1.5kg potatoes (6-8 medium)",
+      "checked": false
+    },
+    {
+      "ingredient": "Butter",
+      "checked": false
+    },
+    {
+      "ingredient": "Milk",
+      "checked": false
+    }
+  ]
+}
