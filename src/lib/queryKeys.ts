@@ -23,4 +23,10 @@ export const queryKeys = {
     detail: (id: number) =>
       [...queryKeys.policeOfficers.details(), id] as const,
   },
+  recipes: {
+    all: ['recipes'] as const,
+    lists: () => [...queryKeys.recipes.all, 'list'] as const,
+    details: () => [...queryKeys.recipes.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.recipes.details(), id] as const,
+  },
 } as const
