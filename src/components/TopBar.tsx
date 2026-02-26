@@ -9,8 +9,6 @@ import {
   useTheme,
 } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
-import BusinessIcon from '@mui/icons-material/Business'
-import BadgeIcon from '@mui/icons-material/Badge'
 import PeopleIcon from '@mui/icons-material/People'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import { useColorMode } from '../routes/__root'
@@ -45,16 +43,6 @@ export function TopBar() {
           <Link to="/home">
             <Button color="inherit" startIcon={<HomeIcon />}>
               Home
-            </Button>
-          </Link>
-          <Link to="/organizations">
-            <Button color="inherit" startIcon={<BusinessIcon />}>
-              Organizations
-            </Button>
-          </Link>
-          <Link to="/police-officers">
-            <Button color="inherit" startIcon={<BadgeIcon />}>
-              Officers
             </Button>
           </Link>
           <Link to="/users">

@@ -12,17 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
 import { Route as RecipesIndexRouteImport } from './routes/recipes/index'
-import { Route as PoliceOfficersIndexRouteImport } from './routes/police-officers/index'
 import { Route as PianoNoteTesterIndexRouteImport } from './routes/piano-note-tester/index'
-import { Route as OrganizationsIndexRouteImport } from './routes/organizations/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as UsersNewRouteImport } from './routes/users/new'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
 import { Route as RecipesAdminRouteImport } from './routes/recipes/admin'
 import { Route as RecipesRecipeIdRouteImport } from './routes/recipes/$recipeId'
-import { Route as PoliceOfficersNewRouteImport } from './routes/police-officers/new'
-import { Route as PoliceOfficersOfficerIdRouteImport } from './routes/police-officers/$officerId'
-import { Route as OrganizationsOrganizationIdRouteImport } from './routes/organizations/$organizationId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -39,19 +34,9 @@ const RecipesIndexRoute = RecipesIndexRouteImport.update({
   path: '/recipes/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PoliceOfficersIndexRoute = PoliceOfficersIndexRouteImport.update({
-  id: '/police-officers/',
-  path: '/police-officers/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PianoNoteTesterIndexRoute = PianoNoteTesterIndexRouteImport.update({
   id: '/piano-note-tester/',
   path: '/piano-note-tester/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrganizationsIndexRoute = OrganizationsIndexRouteImport.update({
-  id: '/organizations/',
-  path: '/organizations/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
@@ -79,69 +64,38 @@ const RecipesRecipeIdRoute = RecipesRecipeIdRouteImport.update({
   path: '/recipes/$recipeId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PoliceOfficersNewRoute = PoliceOfficersNewRouteImport.update({
-  id: '/police-officers/new',
-  path: '/police-officers/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PoliceOfficersOfficerIdRoute = PoliceOfficersOfficerIdRouteImport.update({
-  id: '/police-officers/$officerId',
-  path: '/police-officers/$officerId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrganizationsOrganizationIdRoute =
-  OrganizationsOrganizationIdRouteImport.update({
-    id: '/organizations/$organizationId',
-    path: '/organizations/$organizationId',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
-  '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
-  '/police-officers/new': typeof PoliceOfficersNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/admin': typeof RecipesAdminRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
-  '/organizations/': typeof OrganizationsIndexRoute
   '/piano-note-tester/': typeof PianoNoteTesterIndexRoute
-  '/police-officers/': typeof PoliceOfficersIndexRoute
   '/recipes/': typeof RecipesIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
-  '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
-  '/police-officers/new': typeof PoliceOfficersNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/admin': typeof RecipesAdminRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home': typeof HomeIndexRoute
-  '/organizations': typeof OrganizationsIndexRoute
   '/piano-note-tester': typeof PianoNoteTesterIndexRoute
-  '/police-officers': typeof PoliceOfficersIndexRoute
   '/recipes': typeof RecipesIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/organizations/$organizationId': typeof OrganizationsOrganizationIdRoute
-  '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
-  '/police-officers/new': typeof PoliceOfficersNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/admin': typeof RecipesAdminRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
-  '/organizations/': typeof OrganizationsIndexRoute
   '/piano-note-tester/': typeof PianoNoteTesterIndexRoute
-  '/police-officers/': typeof PoliceOfficersIndexRoute
   '/recipes/': typeof RecipesIndexRoute
   '/users/': typeof UsersIndexRoute
 }
@@ -149,66 +103,46 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/organizations/$organizationId'
-    | '/police-officers/$officerId'
-    | '/police-officers/new'
     | '/recipes/$recipeId'
     | '/recipes/admin'
     | '/users/$userId'
     | '/users/new'
     | '/home/'
-    | '/organizations/'
     | '/piano-note-tester/'
-    | '/police-officers/'
     | '/recipes/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/organizations/$organizationId'
-    | '/police-officers/$officerId'
-    | '/police-officers/new'
     | '/recipes/$recipeId'
     | '/recipes/admin'
     | '/users/$userId'
     | '/users/new'
     | '/home'
-    | '/organizations'
     | '/piano-note-tester'
-    | '/police-officers'
     | '/recipes'
     | '/users'
   id:
     | '__root__'
     | '/'
-    | '/organizations/$organizationId'
-    | '/police-officers/$officerId'
-    | '/police-officers/new'
     | '/recipes/$recipeId'
     | '/recipes/admin'
     | '/users/$userId'
     | '/users/new'
     | '/home/'
-    | '/organizations/'
     | '/piano-note-tester/'
-    | '/police-officers/'
     | '/recipes/'
     | '/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  OrganizationsOrganizationIdRoute: typeof OrganizationsOrganizationIdRoute
-  PoliceOfficersOfficerIdRoute: typeof PoliceOfficersOfficerIdRoute
-  PoliceOfficersNewRoute: typeof PoliceOfficersNewRoute
   RecipesRecipeIdRoute: typeof RecipesRecipeIdRoute
   RecipesAdminRoute: typeof RecipesAdminRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
   UsersNewRoute: typeof UsersNewRoute
   HomeIndexRoute: typeof HomeIndexRoute
-  OrganizationsIndexRoute: typeof OrganizationsIndexRoute
   PianoNoteTesterIndexRoute: typeof PianoNoteTesterIndexRoute
-  PoliceOfficersIndexRoute: typeof PoliceOfficersIndexRoute
   RecipesIndexRoute: typeof RecipesIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
@@ -236,25 +170,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecipesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/police-officers/': {
-      id: '/police-officers/'
-      path: '/police-officers'
-      fullPath: '/police-officers/'
-      preLoaderRoute: typeof PoliceOfficersIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/piano-note-tester/': {
       id: '/piano-note-tester/'
       path: '/piano-note-tester'
       fullPath: '/piano-note-tester/'
       preLoaderRoute: typeof PianoNoteTesterIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/organizations/': {
-      id: '/organizations/'
-      path: '/organizations'
-      fullPath: '/organizations/'
-      preLoaderRoute: typeof OrganizationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home/': {
@@ -292,43 +212,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecipesRecipeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/police-officers/new': {
-      id: '/police-officers/new'
-      path: '/police-officers/new'
-      fullPath: '/police-officers/new'
-      preLoaderRoute: typeof PoliceOfficersNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/police-officers/$officerId': {
-      id: '/police-officers/$officerId'
-      path: '/police-officers/$officerId'
-      fullPath: '/police-officers/$officerId'
-      preLoaderRoute: typeof PoliceOfficersOfficerIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/organizations/$organizationId': {
-      id: '/organizations/$organizationId'
-      path: '/organizations/$organizationId'
-      fullPath: '/organizations/$organizationId'
-      preLoaderRoute: typeof OrganizationsOrganizationIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  OrganizationsOrganizationIdRoute: OrganizationsOrganizationIdRoute,
-  PoliceOfficersOfficerIdRoute: PoliceOfficersOfficerIdRoute,
-  PoliceOfficersNewRoute: PoliceOfficersNewRoute,
   RecipesRecipeIdRoute: RecipesRecipeIdRoute,
   RecipesAdminRoute: RecipesAdminRoute,
   UsersUserIdRoute: UsersUserIdRoute,
   UsersNewRoute: UsersNewRoute,
   HomeIndexRoute: HomeIndexRoute,
-  OrganizationsIndexRoute: OrganizationsIndexRoute,
   PianoNoteTesterIndexRoute: PianoNoteTesterIndexRoute,
-  PoliceOfficersIndexRoute: PoliceOfficersIndexRoute,
   RecipesIndexRoute: RecipesIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
