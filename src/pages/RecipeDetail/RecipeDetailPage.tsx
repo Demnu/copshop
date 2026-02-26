@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getRecipeById } from '@/data/recipes/getRecipeById'
 import { updateRecipeChecked } from '@/data/recipes/updateRecipeChecked'
 import { clearAllRecipeChecked } from '@/data/recipes/clearAllRecipeChecked'
+import { deleteRecipe } from '@/data/recipes/deleteRecipe'
 import { queryKeys } from '@/lib/queryKeys'
 import {
   GovUKPageContainer,
@@ -106,6 +107,19 @@ export function RecipeDetailPage() {
   const checkedCount = recipe.ingredients.filter((ing) => ing.checked).length
   const allChecked = checkedCount === recipe.ingredients.length
 
+  const handleDelete = async () => {
+    if (!recipe) return
+    if (!window.confirm('Are you sure you want to delete this recipe?')) return
+    try {
+      await deleteRecipe({ data: { recipeId: recipe.id } })
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipes.lists() })
+      navigate({ to: '/recipes' })
+    } catch (error) {
+      alert('Failed to delete recipe.')
+      console.error(error)
+    }
+  }
+
   return (
     <GovUKPageContainer>
       <GovUKBackLink onClick={() => navigate({ to: '/recipes' })}>
@@ -115,7 +129,15 @@ export function RecipeDetailPage() {
       <GovUKPageHeader
         title={recipe.name}
         caption={`${checkedCount} of ${recipe.ingredients.length} checked`}
-      />
+      >
+        <GovUKButton
+          variant="danger"
+          onClick={handleDelete}
+          style={{ float: 'right' }}
+        >
+          Delete recipe
+        </GovUKButton>
+      </GovUKPageHeader>
 
       {checkedCount > 0 && (
         <div className="govuk-!-margin-bottom-6">

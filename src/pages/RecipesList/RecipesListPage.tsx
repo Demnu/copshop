@@ -1,7 +1,8 @@
 import 'govuk-frontend/dist/govuk/govuk-frontend.min.css'
 import { Link, useNavigate } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
 import { getRecipes } from '@/data/recipes/getRecipes'
+import { deleteRecipe } from '@/data/recipes/deleteRecipe'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/lib/queryKeys'
 import {
   GovUKPageContainer,
@@ -12,6 +13,7 @@ import {
 
 export function RecipesListPage() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const { data: recipes = [], isLoading } = useQuery({
     queryKey: queryKeys.recipes.lists(),
@@ -40,28 +42,67 @@ export function RecipesListPage() {
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full">
             {recipes.map((recipe) => (
-              <div key={recipe.id} className="govuk-!-margin-bottom-3">
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    navigate({
-                      to: '/recipes/$recipeId',
-                      params: { recipeId: recipe.id },
-                    })
+              <div
+                key={recipe.id}
+                className="govuk-!-margin-bottom-3"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div style={{ flex: 1 }}>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      navigate({
+                        to: '/recipes/$recipeId',
+                        params: { recipeId: recipe.id },
+                      })
+                    }}
+                    className="govuk-link govuk-heading-m govuk-!-margin-bottom-1"
+                    style={{ display: 'block', textDecoration: 'none' }}
+                  >
+                    {recipe.name}
+                  </a>
+                  <p
+                    className="govuk-body-s govuk-!-margin-bottom-0"
+                    style={{ color: '#505a5f' }}
+                  >
+                    Tap to view ingredients
+                  </p>
+                </div>
+                <GovUKButton
+                  variant="warning"
+                  style={{ marginLeft: 16 }}
+                  onClick={async () => {
+                    if (
+                      !window.confirm(
+                        'Are you sure you want to delete this recipe?',
+                      )
+                    )
+                      return
+                    try {
+                      await deleteRecipe({ data: { recipeId: recipe.id } })
+                      await queryClient.invalidateQueries({
+                        queryKey: queryKeys.recipes.lists(),
+                      })
+                      await queryClient.refetchQueries({
+                        queryKey: queryKeys.recipes.lists(),
+                      })
+                    } catch (error) {
+                      alert('Failed to delete recipe.')
+                      console.error(error)
+                    }
                   }}
-                  className="govuk-link govuk-heading-m govuk-!-margin-bottom-1"
-                  style={{ display: 'block', textDecoration: 'none' }}
                 >
-                  {recipe.name}
-                </a>
-                <p
-                  className="govuk-body-s govuk-!-margin-bottom-0"
-                  style={{ color: '#505a5f' }}
-                >
-                  Tap to view ingredients
-                </p>
-                <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+                  Delete
+                </GovUKButton>
+                <hr
+                  className="govuk-section-break govuk-section-break--m govuk-section-break--visible"
+                  style={{ marginLeft: 16 }}
+                />
               </div>
             ))}
           </div>

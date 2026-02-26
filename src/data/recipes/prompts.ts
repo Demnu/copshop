@@ -26,7 +26,7 @@ If the user provides recipe text with a name and ingredients, extract them clear
 
 SCENARIO 2 - Generating from description: 
 If the user provides a vague request like "make me a pasta dish" or "something with chicken and rice", generate a complete recipe with:
-- Arecipe name
+- A recipe name
 - grocery store ingredients needed to make that dish
 - Keep ingredients simple and realistic for home cooking
 
@@ -34,8 +34,9 @@ SCENARIO 3 - Generating from ingredients:
 If the user lists ingredients without a recipe name, create a recipe name that makes sense for those ingredients and use their ingredient list.
 
 Rules:
+- based in australian English and cooking context
 - Ingredient names should be clear and concise (e.g., "chicken breast", "olive oil", "garlic")
-- Remove specific quantities/measurements from ingredient names
+- we need the amount of each ingredient (e.g., "2 chicken breasts", "1 tbsp olive oil", "3 cloves garlic") metric system
 - Always set "checked" to false for all ingredients
 - Be creative but practical - suggest recipes people can actually make
 - Return ONLY the JSON object, no additional text or explanation`
