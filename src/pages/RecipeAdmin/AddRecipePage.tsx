@@ -19,7 +19,7 @@ interface Ingredient {
   checked: boolean
 }
 
-export function RecipeAdmin() {
+export function AddRecipePage() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [recipeText, setRecipeText] = useState('')
@@ -37,7 +37,10 @@ export function RecipeAdmin() {
     onSuccess: (data) => {
       setRecipeName(data.name)
       setIngredients(data.ingredients)
-      setMessage({ type: 'success', text: 'Recipe ready! Review and edit if needed. ✨' })
+      setMessage({
+        type: 'success',
+        text: 'Recipe ready! Review and edit if needed. ✨',
+      })
       setRecipeText('')
     },
     onError: (error: Error) => {
@@ -73,7 +76,10 @@ export function RecipeAdmin() {
 
   const handleParseWithAI = () => {
     if (!recipeText.trim()) {
-      setMessage({ type: 'error', text: 'Please enter a recipe or description' })
+      setMessage({
+        type: 'error',
+        text: 'Please enter a recipe or description',
+      })
       return
     }
     setMessage(null)
@@ -153,7 +159,8 @@ export function RecipeAdmin() {
           </label>
         </h2>
         <div className="govuk-hint" style={{ marginBottom: '15px' }}>
-          Paste an existing recipe, list ingredients, or just describe what you want (e.g., "something spicy with chicken and vegetables")
+          Paste an existing recipe, list ingredients, or just describe what you
+          want (e.g., "something spicy with chicken and vegetables")
         </div>
         <textarea
           id="recipeText"
