@@ -10,7 +10,7 @@ import {
   GovUKButton,
 } from '@/components/govuk'
 
-export function RecipesList() {
+export function RecipesListPage() {
   const navigate = useNavigate()
 
   const { data: recipes = [], isLoading } = useQuery({
@@ -29,7 +29,7 @@ export function RecipesList() {
   return (
     <GovUKPageContainer>
       <GovUKPageHeader title="Recipes" caption="Shopping lists for Aldi">
-        <Link to="/recipes/admin">
+        <Link to="/recipes/addRecipe">
           <GovUKButton>Add recipe</GovUKButton>
         </Link>
       </GovUKPageHeader>

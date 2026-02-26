@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { RecipesList } from '@/pages/RecipesList/RecipesList'
+import { RecipesListPage } from '@/pages/RecipesList/RecipesListPage'
 
 export const Route = createFileRoute('/recipes/')({
   component: RecipesPage,
@@ -17,5 +17,5 @@ export const Route = createFileRoute('/recipes/')({
 })
 
 function RecipesPage() {
-  return <RecipesList />
+  return <RecipesListPage />
 }

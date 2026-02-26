@@ -14,7 +14,7 @@ import {
   GovUKCheckbox,
 } from '@/components/govuk'
 
-export function RecipeDetail() {
+export function RecipeDetailPage() {
   const { recipeId } = useParams({ from: '/recipes/$recipeId' })
   const navigate = useNavigate()
   const queryClient = useQueryClient()
