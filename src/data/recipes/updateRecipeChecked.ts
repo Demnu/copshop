@@ -3,6 +3,9 @@ import { z } from 'zod'
 import { promises as fs } from 'fs'
 import path from 'path'
 import type { Recipe } from './recipeSchemas'
+import { getFromS3, putToS3 } from '../../lib/s3'
+
+const useS3 = process.env.USE_S3 === 'true'
 
 export const updateRecipeChecked = createServerFn({ method: 'POST' })
   .inputValidator(
@@ -14,27 +17,33 @@ export const updateRecipeChecked = createServerFn({ method: 'POST' })
   )
   .handler(async (ctx): Promise<{ success: boolean }> => {
     const { recipeId, ingredientIndex, checked } = ctx.data
-    const recipesDir = path.join(
-      process.cwd(),
-      'src',
-      'data',
-      'recipes',
-      'json',
-    )
-    const filePath = path.join(recipesDir, `${recipeId}.json`)
 
     try {
-      // Read the existing recipe
-      const content = await fs.readFile(filePath, 'utf-8')
-      const recipe: Recipe = JSON.parse(content)
-
-      // Update the specific ingredient's checked state
-      if (recipe.ingredients[ingredientIndex]) {
-        recipe.ingredients[ingredientIndex].checked = checked
+      let recipe: Recipe
+      
+      if (useS3) {
+        // S3: read from cloud storage, update, write back
+        recipe = await getFromS3(`recipes/${recipeId}.json`)
+        
+        if (recipe.ingredients[ingredientIndex]) {
+          recipe.ingredients[ingredientIndex].checked = checked
+        }
+        
+        await putToS3(`recipes/${recipeId}.json`, recipe)
+      } else {
+        // Filesystem: read from local directory, update, write back
+        const recipesDir = path.join(process.cwd(), 'src', 'data', 'recipes', 'json')
+        const filePath = path.join(recipesDir, `${recipeId}.json`)
+        
+        const content = await fs.readFile(filePath, 'utf-8')
+        recipe = JSON.parse(content)
+        
+        if (recipe.ingredients[ingredientIndex]) {
+          recipe.ingredients[ingredientIndex].checked = checked
+        }
+        
+        await fs.writeFile(filePath, JSON.stringify(recipe, null, 2), 'utf-8')
       }
-
-      // Write back to file
-      await fs.writeFile(filePath, JSON.stringify(recipe, null, 2), 'utf-8')
 
       return { success: true }
     } catch (error) {

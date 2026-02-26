@@ -18,6 +18,7 @@ import { Route as OrganizationsIndexRouteImport } from './routes/organizations/i
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as UsersNewRouteImport } from './routes/users/new'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
+import { Route as RecipesAdminRouteImport } from './routes/recipes/admin'
 import { Route as RecipesRecipeIdRouteImport } from './routes/recipes/$recipeId'
 import { Route as PoliceOfficersNewRouteImport } from './routes/police-officers/new'
 import { Route as PoliceOfficersOfficerIdRouteImport } from './routes/police-officers/$officerId'
@@ -68,6 +69,11 @@ const UsersUserIdRoute = UsersUserIdRouteImport.update({
   path: '/users/$userId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecipesAdminRoute = RecipesAdminRouteImport.update({
+  id: '/recipes/admin',
+  path: '/recipes/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RecipesRecipeIdRoute = RecipesRecipeIdRouteImport.update({
   id: '/recipes/$recipeId',
   path: '/recipes/$recipeId',
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
+  '/recipes/admin': typeof RecipesAdminRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
+  '/recipes/admin': typeof RecipesAdminRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home': typeof HomeIndexRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/police-officers/$officerId': typeof PoliceOfficersOfficerIdRoute
   '/police-officers/new': typeof PoliceOfficersNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
+  '/recipes/admin': typeof RecipesAdminRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
   '/home/': typeof HomeIndexRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/police-officers/$officerId'
     | '/police-officers/new'
     | '/recipes/$recipeId'
+    | '/recipes/admin'
     | '/users/$userId'
     | '/users/new'
     | '/home/'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/police-officers/$officerId'
     | '/police-officers/new'
     | '/recipes/$recipeId'
+    | '/recipes/admin'
     | '/users/$userId'
     | '/users/new'
     | '/home'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/police-officers/$officerId'
     | '/police-officers/new'
     | '/recipes/$recipeId'
+    | '/recipes/admin'
     | '/users/$userId'
     | '/users/new'
     | '/home/'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   PoliceOfficersOfficerIdRoute: typeof PoliceOfficersOfficerIdRoute
   PoliceOfficersNewRoute: typeof PoliceOfficersNewRoute
   RecipesRecipeIdRoute: typeof RecipesRecipeIdRoute
+  RecipesAdminRoute: typeof RecipesAdminRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
   UsersNewRoute: typeof UsersNewRoute
   HomeIndexRoute: typeof HomeIndexRoute
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersUserIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recipes/admin': {
+      id: '/recipes/admin'
+      path: '/recipes/admin'
+      fullPath: '/recipes/admin'
+      preLoaderRoute: typeof RecipesAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/recipes/$recipeId': {
       id: '/recipes/$recipeId'
       path: '/recipes/$recipeId'
@@ -302,6 +322,7 @@ const rootRouteChildren: RootRouteChildren = {
   PoliceOfficersOfficerIdRoute: PoliceOfficersOfficerIdRoute,
   PoliceOfficersNewRoute: PoliceOfficersNewRoute,
   RecipesRecipeIdRoute: RecipesRecipeIdRoute,
+  RecipesAdminRoute: RecipesAdminRoute,
   UsersUserIdRoute: UsersUserIdRoute,
   UsersNewRoute: UsersNewRoute,
   HomeIndexRoute: HomeIndexRoute,

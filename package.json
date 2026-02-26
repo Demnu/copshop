@@ -16,6 +16,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.997.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mapbox/mapbox-gl-geocoder": "^5.1.2",
@@ -37,6 +38,7 @@
     "lucide-react": "^0.561.0",
     "mapbox-gl": "^3.18.1",
     "nitro": "npm:nitro-nightly@latest",
+    "openai": "^6.25.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-map-gl": "^8.1.0",
