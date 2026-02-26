@@ -1,5 +1,5 @@
 import 'govuk-frontend/dist/govuk/govuk-frontend.min.css'
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { getRecipes } from '@/data/recipes/getRecipes'
 import { queryKeys } from '@/lib/queryKeys'
@@ -7,6 +7,7 @@ import {
   GovUKPageContainer,
   GovUKPageHeader,
   GovUKBody,
+  GovUKButton,
 } from '@/components/govuk'
 
 export function RecipesList() {
@@ -27,7 +28,11 @@ export function RecipesList() {
 
   return (
     <GovUKPageContainer>
-      <GovUKPageHeader title="Recipes" caption="Shopping lists for Aldi" />
+      <GovUKPageHeader title="Recipes" caption="Shopping lists for Aldi">
+        <Link to="/recipes/admin">
+          <GovUKButton>Add recipe</GovUKButton>
+        </Link>
+      </GovUKPageHeader>
 
       {recipes.length === 0 ? (
         <GovUKBody>No recipes found</GovUKBody>
@@ -40,14 +45,20 @@ export function RecipesList() {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    navigate({ to: '/recipes/$recipeId', params: { recipeId: recipe.id } })
+                    navigate({
+                      to: '/recipes/$recipeId',
+                      params: { recipeId: recipe.id },
+                    })
                   }}
                   className="govuk-link govuk-heading-m govuk-!-margin-bottom-1"
                   style={{ display: 'block', textDecoration: 'none' }}
                 >
                   {recipe.name}
                 </a>
-                <p className="govuk-body-s govuk-!-margin-bottom-0" style={{ color: '#505a5f' }}>
+                <p
+                  className="govuk-body-s govuk-!-margin-bottom-0"
+                  style={{ color: '#505a5f' }}
+                >
                   Tap to view ingredients
                 </p>
                 <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />

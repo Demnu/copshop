@@ -2,6 +2,7 @@ import 'govuk-frontend/dist/govuk/govuk-frontend.min.css'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createRecipe } from '@/data/recipes/createRecipe'
+import { parseRecipeWithAI } from '@/data/recipes/parseRecipeWithAI'
 import { queryKeys } from '@/lib/queryKeys'
 import {
   GovUKPageContainer,
@@ -19,6 +20,7 @@ interface Ingredient {
 
 export function RecipeAdmin() {
   const queryClient = useQueryClient()
+  const [recipeText, setRecipeText] = useState('')
   const [recipeName, setRecipeName] = useState('')
   const [ingredients, setIngredients] = useState<Ingredient[]>([
     { ingredient: '', checked: false },
@@ -27,6 +29,19 @@ export function RecipeAdmin() {
     type: 'success' | 'error'
     text: string
   } | null>(null)
+
+  const parseMutation = useMutation({
+    mutationFn: parseRecipeWithAI,
+    onSuccess: (data) => {
+      setRecipeName(data.name)
+      setIngredients(data.ingredients)
+      setMessage({ type: 'success', text: 'Recipe parsed successfully! ✨' })
+      setRecipeText('')
+    },
+    onError: (error: Error) => {
+      setMessage({ type: 'error', text: `Parsing error: ${error.message}` })
+    },
+  })
 
   const mutation = useMutation({
     mutationFn: createRecipe,
@@ -54,6 +69,15 @@ export function RecipeAdmin() {
     const updated = [...ingredients]
     updated[index].ingredient = value
     setIngredients(updated)
+  }
+
+  const handleParseWithAI = () => {
+    if (!recipeText.trim()) {
+      setMessage({ type: 'error', text: 'Please enter recipe text to parse' })
+      return
+    }
+    setMessage(null)
+    parseMutation.mutate({ data: { text: recipeText } })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -120,6 +144,40 @@ export function RecipeAdmin() {
           </GovUKBody>
         </div>
       )}
+
+      {/* AI Parsing Section */}
+      <div
+        className="govuk-form-group"
+        style={{
+          marginBottom: '40px',
+          padding: '20px',
+          backgroundColor: '#f3f2f1',
+          border: '2px solid #0b0c0c',
+        }}
+      >
+        <h2 className="govuk-label-wrapper">
+          <label className="govuk-label govuk-label--l" htmlFor="recipeText">
+            Parse Recipe with AI
+          </label>
+        </h2>
+
+        <textarea
+          id="recipeText"
+          className="govuk-textarea"
+          rows={8}
+          value={recipeText}
+          onChange={(e) => setRecipeText(e.target.value)}
+          placeholder="Paste recipe text here... e.g. 'Chicken Curry: boneless chicken, curry powder, coconut milk, onions, garlic, ginger...'"
+          style={{ marginBottom: '15px' }}
+        />
+        <GovUKButton
+          type="button"
+          onClick={handleParseWithAI}
+          disabled={parseMutation.isPending || !recipeText.trim()}
+        >
+          {parseMutation.isPending ? 'Parsing...' : '✨ Parse with AI'}
+        </GovUKButton>
+      </div>
 
       <form onSubmit={handleSubmit} className="govuk-form-group">
         <GovUKFormGroup
