@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import { useState, useMemo, createContext, useContext, useEffect } from 'react'
 import { AppDrawer } from '../components/Drawer'
+import { StealthModeProvider } from '../contexts/StealthModeContext'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} })
 
@@ -39,11 +40,11 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'CopShop - TanStack Start',
+        title: 'Enablar - Recipe & Note Manager',
       },
       {
         name: 'description',
-        content: 'Manage police officers, organizations, and recipes',
+        content: 'Manage recipes and practice music notes',
       },
       {
         name: 'theme-color',
@@ -59,7 +60,7 @@ export const Route = createRootRoute({
       },
       {
         name: 'apple-mobile-web-app-title',
-        content: 'CopShop',
+        content: 'Enablar',
       },
     ],
     links: [
@@ -139,11 +140,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <ColorModeContext.Provider value={colorMode}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <AppDrawer>{children}</AppDrawer>
-              {/* <TanStackDevtools
+          <StealthModeProvider>
+            <ColorModeContext.Provider value={colorMode}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <AppDrawer>{children}</AppDrawer>
+                {/* <TanStackDevtools
                 config={{
                   position: 'bottom-right',
                 }}
@@ -154,8 +156,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                   },
                 ]}
               /> */}
-            </ThemeProvider>
-          </ColorModeContext.Provider>
+              </ThemeProvider>
+            </ColorModeContext.Provider>
+          </StealthModeProvider>
         </QueryClientProvider>
         <Scripts />
       </body>
