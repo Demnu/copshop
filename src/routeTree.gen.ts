@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
 import { Route as RecipesIndexRouteImport } from './routes/recipes/index'
 import { Route as PianoNoteTesterIndexRouteImport } from './routes/piano-note-tester/index'
-import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as UsersNewRouteImport } from './routes/users/new'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
 import { Route as RecipesAddRecipeRouteImport } from './routes/recipes/addRecipe'
@@ -37,11 +36,6 @@ const RecipesIndexRoute = RecipesIndexRouteImport.update({
 const PianoNoteTesterIndexRoute = PianoNoteTesterIndexRouteImport.update({
   id: '/piano-note-tester/',
   path: '/piano-note-tester/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeIndexRoute = HomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsersNewRoute = UsersNewRouteImport.update({
@@ -71,7 +65,6 @@ export interface FileRoutesByFullPath {
   '/recipes/addRecipe': typeof RecipesAddRecipeRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
-  '/home/': typeof HomeIndexRoute
   '/piano-note-tester/': typeof PianoNoteTesterIndexRoute
   '/recipes/': typeof RecipesIndexRoute
   '/users/': typeof UsersIndexRoute
@@ -82,7 +75,6 @@ export interface FileRoutesByTo {
   '/recipes/addRecipe': typeof RecipesAddRecipeRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
-  '/home': typeof HomeIndexRoute
   '/piano-note-tester': typeof PianoNoteTesterIndexRoute
   '/recipes': typeof RecipesIndexRoute
   '/users': typeof UsersIndexRoute
@@ -94,7 +86,6 @@ export interface FileRoutesById {
   '/recipes/addRecipe': typeof RecipesAddRecipeRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/users/new': typeof UsersNewRoute
-  '/home/': typeof HomeIndexRoute
   '/piano-note-tester/': typeof PianoNoteTesterIndexRoute
   '/recipes/': typeof RecipesIndexRoute
   '/users/': typeof UsersIndexRoute
@@ -107,7 +98,6 @@ export interface FileRouteTypes {
     | '/recipes/addRecipe'
     | '/users/$userId'
     | '/users/new'
-    | '/home/'
     | '/piano-note-tester/'
     | '/recipes/'
     | '/users/'
@@ -118,7 +108,6 @@ export interface FileRouteTypes {
     | '/recipes/addRecipe'
     | '/users/$userId'
     | '/users/new'
-    | '/home'
     | '/piano-note-tester'
     | '/recipes'
     | '/users'
@@ -129,7 +118,6 @@ export interface FileRouteTypes {
     | '/recipes/addRecipe'
     | '/users/$userId'
     | '/users/new'
-    | '/home/'
     | '/piano-note-tester/'
     | '/recipes/'
     | '/users/'
@@ -141,7 +129,6 @@ export interface RootRouteChildren {
   RecipesAddRecipeRoute: typeof RecipesAddRecipeRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
   UsersNewRoute: typeof UsersNewRoute
-  HomeIndexRoute: typeof HomeIndexRoute
   PianoNoteTesterIndexRoute: typeof PianoNoteTesterIndexRoute
   RecipesIndexRoute: typeof RecipesIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
@@ -175,13 +162,6 @@ declare module '@tanstack/react-router' {
       path: '/piano-note-tester'
       fullPath: '/piano-note-tester/'
       preLoaderRoute: typeof PianoNoteTesterIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home/': {
-      id: '/home/'
-      path: '/home'
-      fullPath: '/home/'
-      preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/users/new': {
@@ -221,7 +201,6 @@ const rootRouteChildren: RootRouteChildren = {
   RecipesAddRecipeRoute: RecipesAddRecipeRoute,
   UsersUserIdRoute: UsersUserIdRoute,
   UsersNewRoute: UsersNewRoute,
-  HomeIndexRoute: HomeIndexRoute,
   PianoNoteTesterIndexRoute: PianoNoteTesterIndexRoute,
   RecipesIndexRoute: RecipesIndexRoute,
   UsersIndexRoute: UsersIndexRoute,

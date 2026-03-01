@@ -1,221 +1,105 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  List,
-  ListItem,
-  ListItemText,
-  Alert,
-  CircularProgress,
-  Box,
-  Grid,
-} from '@mui/material'
-import { getGreeting } from '@/data/serverFunctions'
-import { getUsers } from '@/data/users/getUsers'
-import { createUser } from '@/data/users/createUser'
-import { queryKeys } from '@/lib/queryKeys'
+import { createFileRoute } from '@tanstack/react-router'
+import { useMemo } from 'react'
+import { GovUKPageContainer, GovUKPageHeader } from '@/components/govuk'
+import 'govuk-frontend/dist/govuk/govuk-frontend.min.css'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({ component: HomePage })
 
-function App() {
-  const queryClient = useQueryClient()
-  const [name, setName] = useState('World')
-  const [userName, setUserName] = useState('')
-  const [userEmail, setUserEmail] = useState('')
+const inspiringPeople = [
+  {
+    name: 'Julian Assange',
+    description: 'Founder of WikiLeaks, transparency advocate',
+    quotes: [
+      'If wars can be started by lies, peace can be started by truth.',
+      'Capable, generous men do not create victims, they nurture victims.',
+      'The overwhelming majority of information is classified to protect political security, not national security.',
+      'Courage is contagious.',
+      'The goal is to use Afghanistan to wash money out of the tax bases of the US and Europe through Afghanistan and back into the hands of a transnational security elite.',
+    ],
+  },
+  {
+    name: 'Fidel Castro',
+    description: 'Cuban revolutionary and politician',
+    quotes: [
+      'A revolution is not a bed of roses. A revolution is a struggle between the future and the past.',
+      'I began revolution with 82 men. If I had to do it again, I do it with 10 or 15 and absolute faith. It does not matter how small you are if you have faith and plan of action.',
+      'Condemn me, it does not matter. History will absolve me.',
+      'I am a Marxist-Leninist and I will be one until the last day of my life.',
+      'We do not have a choice between the government and the people; the government must be an instrument of the people.',
+    ],
+  },
+  {
+    name: 'Paulo Freire',
+    description: 'Educator and philosopher of critical pedagogy',
+    quotes: [
+      'There is no such thing as a neutral educational process.',
+      "Washing one's hands of the conflict between the powerful and the powerless means to side with the powerful, not to be neutral.",
+      'The oppressed, having internalized the image of the oppressor and adopted his guidelines, are fearful of freedom.',
+      'Education either functions as an instrument which is used to facilitate integration of the younger generation into the logic of the present system and bring about conformity or it becomes the practice of freedom.',
+      'Knowledge emerges only through invention and re-invention, through the restless, impatient, continuing, hopeful inquiry human beings pursue in the world, with the world, and with each other.',
+    ],
+  },
+]
 
-  // Query for greeting
-  const { data: greetingData, isLoading: greetingLoading } = useQuery({
-    queryKey: ['greeting', name],
-    queryFn: () => getGreeting({ data: { name } }),
-  })
-
-  // Query for users
-  const { data: usersData, isLoading: usersLoading } = useQuery({
-    queryKey: queryKeys.users.list(1),
-    queryFn: () => getUsers({ data: { page: 1, limit: 10 } }),
-  })
-
-  // Mutation for creating user
-  const createUserMutation = useMutation({
-    mutationFn: (data: { name: string; email: string }) => createUser({ data }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.users.lists() })
-      setUserName('')
-      setUserEmail('')
-    },
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (userName && userEmail) {
-      createUserMutation.mutate({ name: userName, email: userEmail })
-    }
-  }
+function HomePage() {
+  // Pick a random quote from each person on page load
+  const selectedQuotes = useMemo(() => {
+    return inspiringPeople.map((person) => ({
+      ...person,
+      selectedQuote:
+        person.quotes[Math.floor(Math.random() * person.quotes.length)],
+    }))
+  }, [])
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography
-        variant="h3"
-        component="h1"
-        gutterBottom
-        align="center"
-        sx={{ mb: 4 }}
-      >
-        CopShop Demo - SSR Edition
-      </Typography>
+    <GovUKPageContainer>
+      <GovUKPageHeader
+        title="Truth Seekers"
+        caption="Visionaries who challenged systems and fought for justice"
+      />
 
-      <Stack spacing={3}>
-        <Card sx={{ bgcolor: 'primary.dark', color: 'primary.contrastText' }}>
-          <CardContent>
-            <Typography variant="h5" gutterBottom>
-              Quick Navigation
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <Button
-                  component={Link}
-                  to="/users"
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  sx={{ bgcolor: 'background.paper', color: 'text.primary' }}
+      <div className="govuk-grid-row">
+        {selectedQuotes.map((person) => (
+          <div key={person.name} className="govuk-grid-column-one-third">
+            <div className="govuk-!-margin-bottom-6">
+              <div
+                style={{
+                  border: '1px solid #b1b4b6',
+                  padding: '20px',
+                  backgroundColor: '#f3f2f1',
+                  minHeight: '300px',
+                }}
+              >
+                <h2 className="govuk-heading-m govuk-!-margin-bottom-2">
+                  {person.name}
+                </h2>
+                <p
+                  className="govuk-body-s"
+                  style={{ color: '#505a5f', marginBottom: '15px' }}
                 >
-                  View All Users
-                </Button>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <Button
-                  component={Link}
-                  to="/demo/start/ssr"
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  sx={{ bgcolor: 'background.paper', color: 'text.primary' }}
-                >
-                  View Demos
-                </Button>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent>
-            <Typography variant="h5" component="h2" gutterBottom>
-              Greeting Query
-            </Typography>
-            <TextField
-              fullWidth
-              label="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            {greetingLoading && <CircularProgress size={24} />}
-            {greetingData && (
-              <Alert severity="info">{greetingData.message}</Alert>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent>
-            <Typography variant="h5" component="h2" gutterBottom>
-              Create User
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              <Stack spacing={2}>
-                <TextField
-                  fullWidth
-                  label="Name"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  required
+                  {person.description}
+                </p>
+                <hr
+                  className="govuk-section-break govuk-section-break--m govuk-section-break--visible"
+                  style={{ marginBottom: '15px' }}
                 />
-                <TextField
-                  fullWidth
-                  type="email"
-                  label="Email"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  required
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={createUserMutation.isPending}
-                  fullWidth
+                <blockquote
+                  style={{
+                    borderLeft: '4px solid #1d70b8',
+                    paddingLeft: '15px',
+                    margin: '0',
+                    fontStyle: 'italic',
+                  }}
                 >
-                  {createUserMutation.isPending ? 'Creating...' : 'Create User'}
-                </Button>
-              </Stack>
-            </form>
-            {createUserMutation.isSuccess && (
-              <Alert severity="success" sx={{ mt: 2 }}>
-                User created successfully!
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent>
-            <Typography variant="h5" component="h2" gutterBottom>
-              Users List
-            </Typography>
-            {usersLoading && <CircularProgress />}
-            {usersData && usersData.users.length > 0 && (
-              <>
-                <List>
-                  {usersData.users.slice(0, 5).map((user) => (
-                    <Link
-                      key={user.id}
-                      to="/users/$userId"
-                      params={{ userId: user.id }}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
-                      <ListItem
-                        divider
-                        sx={{
-                          cursor: 'pointer',
-                          '&:hover': { bgcolor: 'action.hover' },
-                        }}
-                      >
-                        <ListItemText
-                          primary={user.name}
-                          secondary={user.email}
-                        />
-                      </ListItem>
-                    </Link>
-                  ))}
-                </List>
-                {usersData.users.length > 5 && (
-                  <Box sx={{ mt: 2 }}>
-                    <Button
-                      component={Link}
-                      to="/users"
-                      variant="outlined"
-                      fullWidth
-                    >
-                      View All {usersData.total} Users
-                    </Button>
-                  </Box>
-                )}
-              </>
-            )}
-            {usersData && usersData.users.length === 0 && (
-              <Typography color="text.secondary">No users yet</Typography>
-            )}
-          </CardContent>
-        </Card>
-      </Stack>
-    </Container>
+                  <p className="govuk-body" style={{ marginBottom: '0' }}>
+                    "{person.selectedQuote}"
+                  </p>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </GovUKPageContainer>
   )
 }
