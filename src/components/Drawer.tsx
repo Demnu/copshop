@@ -185,6 +185,13 @@ interface AppDrawerProps {
 
 export function AppDrawer({ children }: AppDrawerProps) {
   const [open, setOpen] = useState(true)
+  const [stealthMode, setStealthMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('stealth-mode')
+      return saved !== null ? JSON.parse(saved) : true // Default to true (hidden)
+    }
+    return true
+  })
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -194,6 +201,25 @@ export function AppDrawer({ children }: AppDrawerProps) {
       localStorage.setItem('drawer-open', JSON.stringify(open))
     }
   }, [open])
+
+  // Save stealth mode to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('stealth-mode', JSON.stringify(stealthMode))
+    }
+  }, [stealthMode])
+
+  // Toggle stealth mode with Alt key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Alt') {
+        setStealthMode((prev: boolean) => !prev)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -219,22 +245,28 @@ export function AppDrawer({ children }: AppDrawerProps) {
         elevation={2}
       >
         <Toolbar
+          onClick={() => setStealthMode(!stealthMode)}
           sx={{
             position: 'relative',
             overflow: 'hidden',
             backgroundColor: grey[900],
+            cursor: 'pointer',
           }}
         >
-          <FadingScribbles />
+          {!stealthMode && <FadingScribbles />}
           <IconButton
             color="inherit"
             aria-label="toggle drawer"
             edge="start"
-            onClick={toggleDrawer}
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleDrawer()
+            }}
             sx={{ mr: 2, zIndex: 1 }}
           >
             <MenuIcon />
           </IconButton>
+
           <Typography
             variant="h6"
             noWrap
@@ -244,78 +276,82 @@ export function AppDrawer({ children }: AppDrawerProps) {
             Enablar
           </Typography>
 
-          {/* Red Triangle (upside down) */}
-          <Box
-            sx={{
-              width: '32px',
-              height: '28px',
-              backgroundColor: '#cc0000',
-              marginRight: 2,
-              zIndex: 1,
-              boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
-              clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
-            }}
-          />
+          {!stealthMode && (
+            <>
+              {/* Red Triangle (upside down) */}
+              <Box
+                sx={{
+                  width: '32px',
+                  height: '28px',
+                  backgroundColor: '#cc0000',
+                  marginRight: 2,
+                  zIndex: 1,
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                  clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
+                }}
+              />
 
-          {/* Australian Aboriginal Flag */}
-          <Box
-            sx={{
-              position: 'relative',
-              width: '48px',
-              height: '32px',
-              marginRight: 2,
-              zIndex: 1,
-              boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
-            }}
-          >
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '50%',
-                backgroundColor: '#000000',
-              }}
-            />
-            <Box
-              sx={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: '50%',
-                backgroundColor: '#e71d23',
-              }}
-            />
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: '14px',
-                height: '14px',
-                borderRadius: '50%',
-                backgroundColor: '#ffcc00',
-                transform: 'translate(-50%, -50%)',
-              }}
-            />
-          </Box>
+              {/* Australian Aboriginal Flag */}
+              <Box
+                sx={{
+                  position: 'relative',
+                  width: '48px',
+                  height: '32px',
+                  marginRight: 2,
+                  zIndex: 1,
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                }}
+              >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '50%',
+                    backgroundColor: '#000000',
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '50%',
+                    backgroundColor: '#e71d23',
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    width: '14px',
+                    height: '14px',
+                    borderRadius: '50%',
+                    backgroundColor: '#ffcc00',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                />
+              </Box>
 
-          {/* Irish Flag */}
-          <Box
-            sx={{
-              display: 'flex',
-              width: '48px',
-              height: '32px',
-              zIndex: 1,
-              boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
-            }}
-          >
-            <Box sx={{ flex: 1, backgroundColor: '#169b62' }} />
-            <Box sx={{ flex: 1, backgroundColor: '#ffffff' }} />
-            <Box sx={{ flex: 1, backgroundColor: '#ff883e' }} />
-          </Box>
+              {/* Irish Flag */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '48px',
+                  height: '32px',
+                  zIndex: 1,
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                }}
+              >
+                <Box sx={{ flex: 1, backgroundColor: '#169b62' }} />
+                <Box sx={{ flex: 1, backgroundColor: '#ffffff' }} />
+                <Box sx={{ flex: 1, backgroundColor: '#ff883e' }} />
+              </Box>
+            </>
+          )}
         </Toolbar>
       </AppBar>
 
@@ -333,44 +369,46 @@ export function AppDrawer({ children }: AppDrawerProps) {
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <Box
-            sx={{
-              p: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Navigation
-            </Typography>
-            <IconButton onClick={toggleDrawer} size="small">
-              <ChevronLeftIcon />
-            </IconButton>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
+            <Box
+              sx={{
+                p: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                Navigation
+              </Typography>
+              <IconButton onClick={toggleDrawer} size="small">
+                <ChevronLeftIcon />
+              </IconButton>
+            </Box>
+            <Divider />
+            <List>
+              {menuItems.map((item) => (
+                <Link
+                  onClick={() => {
+                    if (isMobile) {
+                      setOpen(false)
+                    }
+                  }}
+                  key={item.to}
+                  to={item.to}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.label} />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              ))}
+            </List>
           </Box>
-          <Divider />
-          <List>
-            {menuItems.map((item) => (
-              <Link
-                onClick={() => {
-                  if (isMobile) {
-                    setOpen(false)
-                  }
-                }}
-                key={item.to}
-                to={item.to}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.label} />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-            ))}
-          </List>
         </Box>
       </Drawer>
 
