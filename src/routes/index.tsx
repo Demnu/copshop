@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { GovUKPageContainer, GovUKPageHeader } from '@/components/govuk'
+import { useStealthMode } from '@/contexts/StealthModeContext'
 import 'govuk-frontend/dist/govuk/govuk-frontend.min.css'
 
 export const Route = createFileRoute('/')({ component: HomePage })
@@ -42,6 +43,8 @@ const inspiringPeople = [
 ]
 
 function HomePage() {
+  const { stealthMode } = useStealthMode()
+
   // Pick a random quote from each person on page load
   const selectedQuotes = useMemo(() => {
     return inspiringPeople.map((person) => ({
@@ -50,6 +53,10 @@ function HomePage() {
         person.quotes[Math.floor(Math.random() * person.quotes.length)],
     }))
   }, [])
+
+  if (stealthMode) {
+    return <></>
+  }
 
   return (
     <GovUKPageContainer>
