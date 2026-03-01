@@ -6,7 +6,7 @@ export const Route = createFileRoute('/piano-note-tester/')({
   head: () => ({
     meta: [
       {
-        title: 'Piano Note Tester - CopShop',
+        title: 'Piano Note Tester - Enablar',
       },
       {
         name: 'description',

@@ -17,7 +17,7 @@ export const Route = createFileRoute('/users/')({
   head: () => ({
     meta: [
       {
-        title: 'Users Directory - CopShop',
+        title: 'Users Directory - Enablar',
       },
       {
         name: 'description',
@@ -25,7 +25,7 @@ export const Route = createFileRoute('/users/')({
       },
       {
         property: 'og:title',
-        content: 'Users Directory - CopShop',
+        content: 'Users Directory - Enablar',
       },
       {
         property: 'og:description',

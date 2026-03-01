@@ -19,7 +19,7 @@ export const Route = createFileRoute('/users/new')({
   head: () => ({
     meta: [
       {
-        title: 'Create User - CopShop',
+        title: 'Create User - Enablar',
       },
       {
         name: 'description',

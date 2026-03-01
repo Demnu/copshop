@@ -6,7 +6,7 @@ export const Route = createFileRoute('/recipes/')({
   head: () => ({
     meta: [
       {
-        title: 'Recipes - CopShop',
+        title: 'Recipes - Enablar',
       },
       {
         name: 'description',

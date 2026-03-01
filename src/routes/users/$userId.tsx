@@ -34,7 +34,7 @@ export const Route = createFileRoute('/users/$userId')({
       return {
         meta: [
           {
-            title: 'User Not Found - CopShop',
+            title: 'User Not Found - Enablar',
           },
         ],
       }
@@ -44,7 +44,7 @@ export const Route = createFileRoute('/users/$userId')({
     return {
       meta: [
         {
-          title: `${user.name} - User Profile - CopShop`,
+          title: `${user.name} - User Profile - Enablar`,
         },
         {
           name: 'description',

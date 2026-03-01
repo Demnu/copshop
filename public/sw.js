@@ -1,4 +1,4 @@
-const CACHE_NAME = 'copshop-v1'
+const CACHE_NAME = 'enablar-v1'
 const urlsToCache = ['/', '/styles.css', '/bloody_hands.png']
 
 // Install event - cache initial resources
