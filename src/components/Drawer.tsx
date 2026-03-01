@@ -23,6 +23,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import PianoIcon from '@mui/icons-material/Piano'
 import { grey } from '@mui/material/colors'
+import { useStealthMode } from '../contexts/StealthModeContext'
 
 interface Scribble {
   id: number
@@ -151,7 +152,7 @@ function FadingScribbles() {
             <path
               d={scribble.path}
               stroke="#cc0000"
-              strokeWidth="2"
+              strokeWidth="1"
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -185,13 +186,7 @@ interface AppDrawerProps {
 
 export function AppDrawer({ children }: AppDrawerProps) {
   const [open, setOpen] = useState(true)
-  const [stealthMode, setStealthMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('stealth-mode')
-      return saved !== null ? JSON.parse(saved) : true // Default to true (hidden)
-    }
-    return true
-  })
+  const { stealthMode, setStealthMode } = useStealthMode()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -201,25 +196,6 @@ export function AppDrawer({ children }: AppDrawerProps) {
       localStorage.setItem('drawer-open', JSON.stringify(open))
     }
   }, [open])
-
-  // Save stealth mode to localStorage whenever it changes
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('stealth-mode', JSON.stringify(stealthMode))
-    }
-  }, [stealthMode])
-
-  // Toggle stealth mode with Alt key
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Alt') {
-        setStealthMode((prev: boolean) => !prev)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
 
   const toggleDrawer = () => {
     setOpen(!open)
